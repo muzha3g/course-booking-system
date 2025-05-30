@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import CoachSection from "@/features/coach/CoachSection";
 
 export default function Page() {
   const router = useRouter();
@@ -21,20 +22,22 @@ export default function Page() {
 
   return (
     <>
-      <nav className="flex justify-end p-10">
-        <Button className="cursor-pointer" onClick={handleLogout}>
+      <nav className="flex justify-end pt-10 pr-10">
+        <Button className="hover:cursor-pointer" onClick={handleLogout}>
           Logout
         </Button>
       </nav>
 
-      <main className="h-screen px-48 py-5">
+      <main className="h-full px-48">
         <Tabs defaultValue="Schedule">
           <TabsList>
             <TabsTrigger value="Schedule">Schedule</TabsTrigger>
             <TabsTrigger value="Coach">Coach</TabsTrigger>
           </TabsList>
           <TabsContent value="Schedule">Schedule</TabsContent>
-          <TabsContent value="Coach">Coach</TabsContent>
+          <TabsContent value="Coach">
+            <CoachSection />
+          </TabsContent>
         </Tabs>
       </main>
     </>
