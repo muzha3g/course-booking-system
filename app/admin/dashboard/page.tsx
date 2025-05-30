@@ -28,7 +28,7 @@ export default function Page() {
         </Button>
       </nav>
 
-      <main className="h-full px-48">
+      <main className="h-full px-48 max-lg:px-20">
         <Tabs defaultValue="Schedule">
           <TabsList>
             <TabsTrigger value="Schedule">Schedule</TabsTrigger>

@@ -1,3 +1,5 @@
+import { Badge } from "@/components/ui/badge";
+
 import {
   Card,
   CardContent,
@@ -18,11 +20,15 @@ export function CoachCard() {
 
       <CardHeader>
         <CardTitle>Name</CardTitle>
-        <CardDescription>
+        {/* <CardDescription className="truncate max-h-10 border-5 border-amber-950">
           Enter your email below to login to your account
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
-      <CardContent></CardContent>
+      <CardContent className="space-x-1">
+        <Badge variant="default">Badge</Badge>
+        <Badge variant="outline">Badge</Badge>
+        <Badge variant="secondary">Badge</Badge>
+      </CardContent>
     </Card>
   );
 }

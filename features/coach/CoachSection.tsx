@@ -1,5 +1,22 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { CoachCard } from "./components/CoachCard";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+const addCoach = async () => {
+  try {
+    const docRef = await addDoc(collection(db, "users"), {
+      first: "Ada",
+      last: "Lovelace",
+      born: 1815,
+    });
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
 
 export default function CoachSection() {
   return (
