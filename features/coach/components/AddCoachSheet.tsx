@@ -99,6 +99,13 @@ export function AddCoachSheet() {
     }
   }, [isSheetOpen]);
 
+  function resetValueOnAvailableTime(index: number) {
+    form.setValue(`availableTimes.${index}.courseType`, "");
+    form.setValue(`availableTimes.${index}.weekday`, "");
+    form.setValue(`availableTimes.${index}.time`, "");
+    form.clearErrors(`availableTimes.${index}` as const);
+  }
+
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
@@ -107,7 +114,8 @@ export function AddCoachSheet() {
           Add Coach
         </Button>
       </SheetTrigger>
-      <SheetContent>
+
+      <SheetContent className="w-[500px] !max-w-none">
         <SheetHeader>
           <SheetTitle className="text-2xl">New Coach</SheetTitle>
         </SheetHeader>
@@ -145,8 +153,8 @@ export function AddCoachSheet() {
               <Label>Available Times</Label>
 
               {fields.map((field, index) => (
-                <div key={field.id} className="flex gap-2 items-start">
-                  <div className="flex-1 space-y-1">
+                <div key={field.id} className="flex items-start gap-2">
+                  <div className="">
                     <Controller
                       control={form.control}
                       name={`availableTimes.${index}.courseType`}
@@ -179,7 +187,7 @@ export function AddCoachSheet() {
                     )}
                   </div>
 
-                  <div className="flex-1 space-y-1">
+                  <div className="">
                     <Controller
                       control={form.control}
                       name={`availableTimes.${index}.weekday`}
@@ -211,7 +219,7 @@ export function AddCoachSheet() {
                     )}
                   </div>
 
-                  <div className="flex-1 space-y-1">
+                  <div className="">
                     <Controller
                       control={form.control}
                       name={`availableTimes.${index}.time`}
@@ -242,6 +250,14 @@ export function AddCoachSheet() {
                       </p>
                     )}
                   </div>
+                  <Button
+                    className="round"
+                    type="button"
+                    variant="secondary"
+                    onClick={() => resetValueOnAvailableTime(index)}
+                  >
+                    -
+                  </Button>
                 </div>
               ))}
               {form.formState.errors.availableTimes && (
