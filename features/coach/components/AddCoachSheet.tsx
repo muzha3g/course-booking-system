@@ -17,7 +17,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 
@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/select";
 
 import { useFieldArray } from "react-hook-form";
+
+import { useState } from "react";
 
 const times = Array.from(
   { length: 13 },
@@ -49,7 +51,7 @@ const courseTypes = ["Basic Skating", "Figure Skating", "Ice ball"];
 
 // const addCoach = async () => {
 //   try {
-//     const docRef = await addDoc(collection(db, "users"), {
+//     const docRef = await addDoc(collection(db, "coaches"), {
 //       first: "Ada",
 //       last: "Lovelace",
 //       born: 1815,
@@ -61,17 +63,17 @@ const courseTypes = ["Basic Skating", "Figure Skating", "Ice ball"];
 // };
 
 const FormSchema = z.object({
-  name: z.string().min(1),
-  description: z.string(),
+  name: z.string().nonempty("Name is required"),
+  description: z.string().nonempty("Description is required"),
   availableTimes: z
     .array(
       z.object({
-        courseType: z.string(),
-        weekday: z.string(),
-        time: z.string(),
+        courseType: z.string().nonempty("Course type is required"),
+        weekday: z.string().nonempty("Weekday type is required"),
+        time: z.string().nonempty("Time type is required"),
       })
     )
-    .nonempty(),
+    .nonempty("At least one available time is required"),
 });
 
 export function AddCoachSheet() {
@@ -87,6 +89,8 @@ export function AddCoachSheet() {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     alert(data);
     console.log(data);
+    setIsSheetOpen(false);
+    form.reset();
   }
 
   const { fields, append, remove } = useFieldArray({
@@ -94,10 +98,12 @@ export function AddCoachSheet() {
     name: "availableTimes",
   });
 
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   return (
-    <Sheet>
+    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={() => setIsSheetOpen(true)}>
           <MdOutlineAddCircle />
           Add Coach
         </Button>
@@ -113,76 +119,149 @@ export function AddCoachSheet() {
             id="coach-info-form"
           >
             <Label>Name</Label>
-            <Input {...form.register("name")} required />
+            <Input
+              {...form.register("name")}
+              className={form.formState.errors.name ? "border-red-500" : ""}
+            />
+            {form.formState.errors.name && (
+              <p className="text-red-500 text-sm">
+                {form.formState.errors.name.message}
+              </p>
+            )}
 
             <Label>Description</Label>
-            <Textarea {...form.register("description")} required />
+            <Textarea
+              {...form.register("description")}
+              className={
+                form.formState.errors.description ? "border-red-500" : ""
+              }
+            />
+            {form.formState.errors.description && (
+              <p className="text-red-500 text-sm">
+                {form.formState.errors.description.message}
+              </p>
+            )}
+
             <div className="space-y-3 py-1">
               <Label>Available Times</Label>
+
               {fields.map((field, index) => (
-                <div className="flex gap-1" key={index}>
-                  <Select
-                    {...form.register(
-                      `availableTimes.${index}.courseType` as const
+                <div key={field.id} className="flex gap-2 items-start">
+                  <div className="flex-1 space-y-1">
+                    <Controller
+                      control={form.control}
+                      name={`availableTimes.${index}.courseType`}
+                      render={({ field: selectField }) => (
+                        <Select
+                          onValueChange={selectField.onChange}
+                          value={selectField.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Course Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {courseTypes.map((type) => (
+                              <SelectItem key={type} value={type}>
+                                {type}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {form.formState.errors.availableTimes?.[index]
+                      ?.courseType && (
+                      <p className="text-red-500 text-sm">
+                        {
+                          form.formState.errors.availableTimes[index]
+                            ?.courseType?.message
+                        }
+                      </p>
                     )}
-                    required
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {courseTypes.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  </div>
 
-                  <Select
-                    {...form.register(
-                      `availableTimes.${index}.weekday` as const
+                  <div className="flex-1 space-y-1">
+                    <Controller
+                      control={form.control}
+                      name={`availableTimes.${index}.weekday`}
+                      render={({ field: selectField }) => (
+                        <Select
+                          onValueChange={selectField.onChange}
+                          value={selectField.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Weekday" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {weekdays.map((d) => (
+                              <SelectItem key={d.value} value={d.value}>
+                                {d.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {form.formState.errors.availableTimes?.[index]?.weekday && (
+                      <p className="text-red-500 text-sm">
+                        {
+                          form.formState.errors.availableTimes[index]?.weekday
+                            ?.message
+                        }
+                      </p>
                     )}
-                    required
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="weekday" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {weekdays.map((d) => (
-                        <SelectItem key={d.value} value={d.value}>
-                          {d.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  </div>
 
-                  <Select
-                    {...form.register(`availableTimes.${index}.time` as const)}
-                    required
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="time" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {times.map((t) => (
-                        <SelectItem key={t} value={t}>
-                          {t}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="flex-1 space-y-1">
+                    <Controller
+                      control={form.control}
+                      name={`availableTimes.${index}.time`}
+                      render={({ field: selectField }) => (
+                        <Select
+                          onValueChange={selectField.onChange}
+                          value={selectField.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Time" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {times.map((t) => (
+                              <SelectItem key={t} value={t}>
+                                {t}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {form.formState.errors.availableTimes?.[index]?.time && (
+                      <p className="text-red-500 text-sm">
+                        {
+                          form.formState.errors.availableTimes[index]?.time
+                            ?.message
+                        }
+                      </p>
+                    )}
+                  </div>
                 </div>
               ))}
+              {form.formState.errors.availableTimes && (
+                <p className="text-red-500 text-sm">
+                  {form.formState.errors.availableTimes.message}
+                </p>
+              )}
             </div>
           </form>
         </section>
         <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit" form="coach-info-form">
-              Create
-            </Button>
-          </SheetClose>
+          <Button
+            type="submit"
+            form="coach-info-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            Create
+          </Button>
+
           <SheetClose asChild>
             <Button variant="outline">Close</Button>
           </SheetClose>
