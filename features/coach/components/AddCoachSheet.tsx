@@ -17,7 +17,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 
@@ -47,6 +47,8 @@ const weekdays = [
   { label: "Sunday", value: "0" },
 ];
 
+const defaultAvailableTime = { courseType: "", weekday: "", time: "" };
+
 const courseTypes = ["Basic Skating", "Figure Skating", "Ice ball"];
 
 const FormSchema = z.object({
@@ -69,13 +71,13 @@ export function AddCoachSheet() {
     defaultValues: {
       name: "",
       description: "",
-      availableTimes: [{ courseType: "", weekday: "", time: "" }],
+      availableTimes: [defaultAvailableTime],
     },
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      const docRef = await addDoc(collection(db, "coach"), data);
+      await addDoc(collection(db, "coach"), data);
       alert("Coach added successfully!");
       form.reset();
       setIsSheetOpen(false);
@@ -105,6 +107,27 @@ export function AddCoachSheet() {
     form.setValue(`availableTimes.${index}.time`, "");
     form.clearErrors(`availableTimes.${index}` as const);
   }
+
+  const watchedAvailableTimes = useWatch({
+    control: form.control,
+    name: "availableTimes",
+  });
+
+  const isLastRowFilled = () => {
+    if (!watchedAvailableTimes || watchedAvailableTimes.length === 0) {
+      return false;
+    }
+    const lastEntry = watchedAvailableTimes[watchedAvailableTimes.length - 1];
+    return (
+      lastEntry.courseType !== "" &&
+      lastEntry.weekday !== "" &&
+      lastEntry.time !== ""
+    );
+  };
+
+  // delete & clear logic
+
+  // Preventing Duplicate Times
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -265,6 +288,18 @@ export function AddCoachSheet() {
                   {form.formState.errors.availableTimes.message}
                 </p>
               )}
+              <div className="my-4">
+                {isLastRowFilled() && (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => append(defaultAvailableTime)}
+                    className="rounded-full"
+                  >
+                    Add Other Time
+                  </Button>
+                )}
+              </div>
             </div>
           </form>
         </section>
