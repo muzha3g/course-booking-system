@@ -125,9 +125,15 @@ export function AddCoachSheet() {
     );
   };
 
-  // delete & clear logic
-
-  // Preventing Duplicate Times
+  const getOccupiedSlots = (currentIndex: number) => {
+    const occupied = new Set<string>();
+    watchedAvailableTimes.forEach((item, index) => {
+      if (index !== currentIndex && item.weekday && item.time) {
+        occupied.add(`${item.weekday}-${item.time}`);
+      }
+    });
+    return occupied;
+  };
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -175,125 +181,145 @@ export function AddCoachSheet() {
             <div className="space-y-3 py-1">
               <Label>Available Times</Label>
 
-              {fields.map((field, index) => (
-                <div key={field.id} className="flex items-start gap-2">
-                  <div className="">
-                    <Controller
-                      control={form.control}
-                      name={`availableTimes.${index}.courseType`}
-                      render={({ field: selectField }) => (
-                        <Select
-                          onValueChange={selectField.onChange}
-                          value={selectField.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Course Type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {courseTypes.map((type) => (
-                              <SelectItem key={type} value={type}>
-                                {type}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+              {fields.map((field, index) => {
+                const occupiedSlots = getOccupiedSlots(index);
+                const currentWeekday = watchedAvailableTimes[index]?.weekday;
+                return (
+                  <div key={field.id} className="flex items-start gap-2">
+                    <div className="">
+                      <Controller
+                        control={form.control}
+                        name={`availableTimes.${index}.courseType`}
+                        render={({ field: selectField }) => (
+                          <Select
+                            onValueChange={selectField.onChange}
+                            value={selectField.value}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Course Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {courseTypes.map((type) => (
+                                <SelectItem key={type} value={type}>
+                                  {type}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                      {form.formState.errors.availableTimes?.[index]
+                        ?.courseType && (
+                        <p className="text-red-500 text-sm">
+                          {
+                            form.formState.errors.availableTimes[index]
+                              ?.courseType?.message
+                          }
+                        </p>
                       )}
-                    />
-                    {form.formState.errors.availableTimes?.[index]
-                      ?.courseType && (
-                      <p className="text-red-500 text-sm">
-                        {
-                          form.formState.errors.availableTimes[index]
-                            ?.courseType?.message
-                        }
-                      </p>
-                    )}
-                  </div>
+                    </div>
 
-                  <div className="">
-                    <Controller
-                      control={form.control}
-                      name={`availableTimes.${index}.weekday`}
-                      render={({ field: selectField }) => (
-                        <Select
-                          onValueChange={selectField.onChange}
-                          value={selectField.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Weekday" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {weekdays.map((d) => (
-                              <SelectItem key={d.value} value={d.value}>
-                                {d.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                    <div className="">
+                      <Controller
+                        control={form.control}
+                        name={`availableTimes.${index}.weekday`}
+                        render={({ field: selectField }) => (
+                          <Select
+                            // onValueChange={selectField.onChange}
+                            value={selectField.value}
+                            onValueChange={(val) => {
+                              selectField.onChange(val);
+                              form.setValue(`availableTimes.${index}.time`, "");
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Weekday" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {weekdays.map((d) => (
+                                <SelectItem key={d.value} value={d.value}>
+                                  {d.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                      {form.formState.errors.availableTimes?.[index]
+                        ?.weekday && (
+                        <p className="text-red-500 text-sm">
+                          {
+                            form.formState.errors.availableTimes[index]?.weekday
+                              ?.message
+                          }
+                        </p>
                       )}
-                    />
-                    {form.formState.errors.availableTimes?.[index]?.weekday && (
-                      <p className="text-red-500 text-sm">
-                        {
-                          form.formState.errors.availableTimes[index]?.weekday
-                            ?.message
-                        }
-                      </p>
-                    )}
-                  </div>
+                    </div>
 
-                  <div className="">
-                    <Controller
-                      control={form.control}
-                      name={`availableTimes.${index}.time`}
-                      render={({ field: selectField }) => (
-                        <Select
-                          onValueChange={selectField.onChange}
-                          value={selectField.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Time" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {times.map((t) => (
-                              <SelectItem key={t} value={t}>
-                                {t}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                    <div className="">
+                      <Controller
+                        control={form.control}
+                        name={`availableTimes.${index}.time`}
+                        render={({ field: selectField }) => (
+                          <Select
+                            onValueChange={selectField.onChange}
+                            value={selectField.value}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Time" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {times.map((t) => (
+                                <SelectItem
+                                  key={t}
+                                  value={t}
+                                  disabled={
+                                    !!(
+                                      currentWeekday &&
+                                      occupiedSlots.has(
+                                        `${currentWeekday}-${t}`
+                                      )
+                                    )
+                                  }
+                                >
+                                  {t}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                      {form.formState.errors.availableTimes?.[index]?.time && (
+                        <p className="text-red-500 text-sm">
+                          {
+                            form.formState.errors.availableTimes[index]?.time
+                              ?.message
+                          }
+                        </p>
                       )}
-                    />
-                    {form.formState.errors.availableTimes?.[index]?.time && (
-                      <p className="text-red-500 text-sm">
-                        {
-                          form.formState.errors.availableTimes[index]?.time
-                            ?.message
-                        }
-                      </p>
+                    </div>
+                    {fields.length > 1 ? (
+                      <Button
+                        className="round"
+                        type="button"
+                        variant="secondary"
+                        onClick={() => remove(index)}
+                      >
+                        d
+                      </Button>
+                    ) : (
+                      <Button
+                        className="round"
+                        type="button"
+                        variant="secondary"
+                        onClick={() => resetValueOnAvailableTime(index)}
+                      >
+                        -
+                      </Button>
                     )}
                   </div>
-                  {fields.length > 1 ? (
-                    <Button
-                      className="round"
-                      type="button"
-                      variant="secondary"
-                      onClick={() => remove(index)}
-                    >
-                      d
-                    </Button>
-                  ) : (
-                    <Button
-                      className="round"
-                      type="button"
-                      variant="secondary"
-                      onClick={() => resetValueOnAvailableTime(index)}
-                    >
-                      -
-                    </Button>
-                  )}
-                </div>
-              ))}
+                );
+              })}
               {form.formState.errors.availableTimes && (
                 <p className="text-red-500 text-sm">
                   {form.formState.errors.availableTimes.message}
