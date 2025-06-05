@@ -31,7 +31,7 @@ import {
 
 import { useFieldArray } from "react-hook-form";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const times = Array.from(
   { length: 13 },
@@ -48,19 +48,6 @@ const weekdays = [
 ];
 
 const courseTypes = ["Basic Skating", "Figure Skating", "Ice ball"];
-
-// const addCoach = async () => {
-//   try {
-//     const docRef = await addDoc(collection(db, "coaches"), {
-//       first: "Ada",
-//       last: "Lovelace",
-//       born: 1815,
-//     });
-//     console.log("Document written with ID: ", docRef.id);
-//   } catch (e) {
-//     console.error("Error adding document: ", e);
-//   }
-// };
 
 const FormSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -86,11 +73,17 @@ export function AddCoachSheet() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    alert(data);
-    console.log(data);
-    setIsSheetOpen(false);
-    form.reset();
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    try {
+      const docRef = await addDoc(collection(db, "coach"), data);
+      alert("Coach added successfully!");
+      form.reset();
+      setIsSheetOpen(false);
+    } catch (error) {
+      console.error("Error adding coach:", error);
+      alert("Failed to add coach. Please try again.");
+      setIsSheetOpen(true);
+    }
   }
 
   const { fields, append, remove } = useFieldArray({
@@ -99,6 +92,12 @@ export function AddCoachSheet() {
   });
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isSheetOpen) {
+      form.reset();
+    }
+  }, [isSheetOpen]);
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
