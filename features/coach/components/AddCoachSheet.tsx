@@ -273,14 +273,25 @@ export function AddCoachSheet() {
                       </p>
                     )}
                   </div>
-                  <Button
-                    className="round"
-                    type="button"
-                    variant="secondary"
-                    onClick={() => resetValueOnAvailableTime(index)}
-                  >
-                    -
-                  </Button>
+                  {fields.length > 1 ? (
+                    <Button
+                      className="round"
+                      type="button"
+                      variant="secondary"
+                      onClick={() => remove(index)}
+                    >
+                      d
+                    </Button>
+                  ) : (
+                    <Button
+                      className="round"
+                      type="button"
+                      variant="secondary"
+                      onClick={() => resetValueOnAvailableTime(index)}
+                    >
+                      -
+                    </Button>
+                  )}
                 </div>
               ))}
               {form.formState.errors.availableTimes && (
