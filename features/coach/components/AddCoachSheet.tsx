@@ -78,7 +78,6 @@ export function AddCoachSheet() {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       await addDoc(collection(db, "coach"), data);
-      alert("Coach added successfully!");
       form.reset();
       setIsSheetOpen(false);
     } catch (error) {
@@ -99,7 +98,7 @@ export function AddCoachSheet() {
     if (!isSheetOpen) {
       form.reset();
     }
-  }, [isSheetOpen]);
+  }, [isSheetOpen, form]);
 
   function resetValueOnAvailableTime(index: number) {
     form.setValue(`availableTimes.${index}.courseType`, "");
