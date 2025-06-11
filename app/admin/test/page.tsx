@@ -1,7 +1,6 @@
-import { getCoaches } from "@/app/api/coach";
-import { getCourses } from "@/app/api/course";
+import { generateCourseData } from "@/app/api/generateCourseData";
 
 export default function page() {
-  getCourses();
+  generateCourseData();
   return <div>page</div>;
 }
