@@ -18,7 +18,7 @@ const coachConverter = {
   ): Coach => {
     const data = snapshot.data(options);
     return {
-      id: snapshot.id,
+      id: data.id,
       name: data.name,
       description: data.description,
       availableTimes: data.availableTimes,
