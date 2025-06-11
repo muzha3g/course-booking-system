@@ -8,30 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { addDays, format } from "date-fns";
-
-type AvailableTime = {
-  courseType: string;
-  time: string;
-  weekday: string;
-};
-
-type Coach = {
-  id: string;
-  name: string;
-  description: string;
-  availableTimes: AvailableTime[];
-};
-
-type Course = {
-  id: string;
-  coachId: string;
-  coachName: string;
-  coachDescription: string;
-  courseType: string;
-  date: string;
-  datetime: string;
-  reservations: [] | never[];
-};
+import { Coach, Course } from "../types";
 
 const coaches: Coach[] = [];
 
