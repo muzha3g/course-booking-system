@@ -9,7 +9,7 @@ import {
   SnapshotOptions,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Course } from "../types";
+import { Course } from "@/types";
 
 const courseConverter = {
   toFirestore: (course: Course) => {
@@ -36,7 +36,7 @@ const courseConverter = {
 
 export const getCourses = async (): Promise<Course[]> => {
   try {
-    const coursesCollectionRef = collection(db, "course").withConverter(
+    const coursesCollectionRef = collection(db, "Test").withConverter(
       courseConverter
     );
     const q = query(coursesCollectionRef);
@@ -55,7 +55,7 @@ export const getCourses = async (): Promise<Course[]> => {
 export const addCourse = async (course: Course): Promise<void> => {
   try {
     await setDoc(
-      doc(db, "course", course.id).withConverter(courseConverter),
+      doc(db, "Test", course.id).withConverter(courseConverter),
       course
     );
     console.log(
@@ -72,7 +72,7 @@ export const checkCourseExists = async (
   datetime: Date
 ): Promise<boolean> => {
   try {
-    const coursesCollectionRef = collection(db, "course").withConverter(
+    const coursesCollectionRef = collection(db, "Test").withConverter(
       courseConverter
     );
     const q = query(

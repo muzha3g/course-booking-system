@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { addDays, format } from "date-fns";
-import { Coach, Course } from "../types";
+import { Coach, Course } from "../../types";
 
 const coaches: Coach[] = [];
 

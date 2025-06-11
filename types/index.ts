@@ -19,5 +19,5 @@ export type Course = {
   courseType: string;
   date: string;
   datetime: string;
-  reservations: [] | never[];
+  reservations: [];
 };
