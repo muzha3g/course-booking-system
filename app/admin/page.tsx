@@ -9,7 +9,7 @@ import {
 import { db } from "@/lib/firebase";
 import { addDays, format } from "date-fns";
 
-type AvailableTimes = {
+type AvailableTime = {
   courseType: string;
   time: string;
   weekday: string;
@@ -19,7 +19,7 @@ type Coach = {
   id: string;
   name: string;
   description: string;
-  availableTimes: AvailableTimes[];
+  availableTimes: AvailableTime[];
 };
 
 type Course = {
@@ -33,14 +33,14 @@ type Course = {
   reservations: [] | never[];
 };
 
-const coachData: Coach[] = [];
+const coaches: Coach[] = [];
 
-const getCoachData = async () => {
+const getAllCoach = async () => {
   const querySnapshot = await getDocs(collection(db, "coach"));
   querySnapshot.forEach((doc) => {
     const data = doc.data();
     data.id = doc.id;
-    coachData.push(data);
+    coaches.push(data);
   });
 };
 
@@ -64,7 +64,7 @@ const getAllCourse = async () => {
 getAllCourse();
 
 const generateCourseData = async (days = 14) => {
-  await getCoachData();
+  await getAllCoach();
 
   const courses = [];
   const today = new Date();
@@ -73,7 +73,7 @@ const generateCourseData = async (days = 14) => {
     const date = addDays(today, i);
     const dayIndex = date.getDay();
 
-    for (const coach of coachData) {
+    for (const coach of coaches) {
       for (const { courseType, time, weekday } of coach.availableTimes) {
         if (Number(weekday) == dayIndex) {
           const hour = Number(time.slice(0, 2));
@@ -117,7 +117,6 @@ const generateCourseData = async (days = 14) => {
 };
 
 export default function Page() {
-  getCoachData();
   generateCourseData();
   return <h1>Admin index</h1>;
 }
