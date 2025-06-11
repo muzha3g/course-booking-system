@@ -46,6 +46,9 @@ const getCoachData = async () => {
 
 const writeCourseDataToFirebase = async (course: Course) => {
   await setDoc(doc(db, "course", course.id), course);
+  console.log(
+    `[CREATE] 新課程：${course.coachName} - ${course.courseType} @ ${course.datetime}`
+  );
 };
 
 const allCourses = [];
@@ -70,11 +73,10 @@ const generateCourseData = async (days = 14) => {
     const date = addDays(today, i);
     const dayIndex = date.getDay();
 
-    coachData.forEach((coach) => {
-      coach.availableTimes.forEach(async ({ courseType, time, weekday }) => {
+    for (const coach of coachData) {
+      for (const { courseType, time, weekday } of coach.availableTimes) {
         if (Number(weekday) == dayIndex) {
           const hour = Number(time.slice(0, 2));
-
           const datetime = new Date(date);
           datetime.setHours(hour, 0, 0, 0);
           const iso = datetime.toISOString();
@@ -90,7 +92,7 @@ const generateCourseData = async (days = 14) => {
             console.log(
               `[SKIP] 已存在課程：${coach.name} - ${courseType} @ ${datetime}`
             );
-            return;
+            continue;
           }
 
           const course = {
@@ -104,18 +106,13 @@ const generateCourseData = async (days = 14) => {
             reservations: [],
           };
           courses.push(course);
-
-          // writeCourseDataToFirebase(course);
         }
-      });
-    });
+      }
+    }
   }
 
   for (const course of courses) {
-    await setDoc(doc(db, "course", course.id), course);
-    console.log(
-      `[CREATE] 新課程：${course.coachName} - ${course.courseType} @ ${course.datetime}`
-    );
+    writeCourseDataToFirebase(course);
   }
 };
 
