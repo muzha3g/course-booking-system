@@ -105,10 +105,17 @@ const generateCourseData = async (days = 14) => {
           };
           courses.push(course);
 
-          writeCourseDataToFirebase(course);
+          // writeCourseDataToFirebase(course);
         }
       });
     });
+  }
+
+  for (const course of courses) {
+    await setDoc(doc(db, "course", course.id), course);
+    console.log(
+      `[CREATE] 新課程：${course.coachName} - ${course.courseType} @ ${course.datetime}`
+    );
   }
 };
 
