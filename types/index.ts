@@ -18,6 +18,7 @@ export type Course = {
   coachDescription: string;
   courseType: string;
   date: string;
-  datetime: string;
   reservations: [];
+  start: string;
+  end: string;
 };

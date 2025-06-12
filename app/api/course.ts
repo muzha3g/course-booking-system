@@ -7,7 +7,14 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { addDays, format } from "date-fns";
+import {
+  addDays,
+  format,
+  setHours,
+  setMinutes,
+  setSeconds,
+  setMilliseconds,
+} from "date-fns";
 import { getCoaches } from "./coach";
 import { Course, Coach } from "@/types";
 
@@ -28,7 +35,7 @@ export const getCourses = async () => {
 export const addCourseToFirebase = async (course: Course) => {
   await setDoc(doc(db, "course", course.id), course);
   console.log(
-    `[CREATE] 新課程：${course.coachName} - ${course.courseType} @ ${course.datetime}`
+    `[CREATE] 新課程：${course.coachName} - ${course.courseType} @ ${course.date}`
   );
 };
 
@@ -38,40 +45,58 @@ export const generateCourseFromCoach = async (days = 14) => {
   const today = new Date();
 
   for (let i = 0; i < days; i++) {
-    const date = addDays(today, i);
-    const dayIndex = date.getDay();
+    const currentDate = addDays(today, i);
+    const currentDayIndex = currentDate.getDay();
 
     for (const coach of coaches) {
       for (const { courseType, time, weekday } of coach.availableTimes) {
-        if (Number(weekday) == dayIndex) {
+        if (Number(weekday) === currentDayIndex) {
           const hour = Number(time.slice(0, 2));
-          const datetime = new Date(date);
-          datetime.setHours(hour, 0, 0, 0);
-          const iso = datetime.toISOString();
+
+          // const datetime = new Date(currentDate);
+          // datetime.setHours(hour, 0, 0, 0);
+          // const start = datetime.toISOString();
+          // datetime.setHours(hour + 1, 0, 0, 0);
+          // const end = datetime.toISOString();
+          // const iso = datetime.toISOString();
+
+          let startDatetime = setHours(currentDate, hour);
+          startDatetime = setMinutes(startDatetime, 0);
+          startDatetime = setSeconds(startDatetime, 0);
+          startDatetime = setMilliseconds(startDatetime, 0); // Ensure no milliseconds
+          const startISO = startDatetime.toISOString();
+
+          let endDatetime = setHours(startDatetime, hour + 1); // Use startDatetime as base
+          endDatetime = setMinutes(endDatetime, 0);
+          endDatetime = setSeconds(endDatetime, 0);
+          endDatetime = setMilliseconds(endDatetime, 0);
+
+          const endISO = endDatetime.toISOString();
 
           const courseQuery = query(
             collection(db, "course"),
             where("coachId", "==", coach.id),
-            where("datetime", "==", datetime)
+            where("start", "==", startISO)
           );
 
           const snapshot = await getDocs(courseQuery);
           if (!snapshot.empty) {
             console.log(
-              `[SKIP] 已存在課程：${coach.name} - ${courseType} @ ${datetime}`
+              `[SKIP] 已存在課程：${coach.name} - ${courseType} @ ${currentDate}`
             );
             continue;
           }
 
           const course = {
-            id: coach.id + iso,
+            id: coach.id + startISO,
             coachId: coach.id,
             coachName: coach.name,
             coachDescription: coach.description,
             courseType,
-            date: format(datetime, "yyyy-MM-dd"),
-            datetime: iso,
+            date: format(startDatetime, "yyyy-MM-dd") + " " + time,
             reservations: [],
+            start: startISO,
+            end: endISO,
           };
           newCourses.push(course as Course);
         }
@@ -79,7 +104,7 @@ export const generateCourseFromCoach = async (days = 14) => {
     }
   }
 
-  for (const course of newCourses) {
-    addCourseToFirebase(course);
-  }
+  const promises = newCourses.map((course) => addCourseToFirebase(course));
+  await Promise.all(promises);
+  console.log(`Successfully added ${newCourses.length} new courses.`);
 };
