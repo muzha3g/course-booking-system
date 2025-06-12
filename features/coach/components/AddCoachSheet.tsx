@@ -33,10 +33,14 @@ import { useFieldArray } from "react-hook-form";
 
 import { useState, useEffect } from "react";
 
-const times = Array.from(
-  { length: 13 },
-  (_, i) => `${i + 9}:00 - ${i + 10}:00`
-);
+const times = Array.from({ length: 13 }, (_, i) => ({
+  label: `${String(i + 9).padStart(2, "0")}:00 - ${String(i + 10).padStart(
+    2,
+    "0"
+  )}:00`,
+  value: String(i + 9),
+}));
+
 const weekdays = [
   { label: "Monday", value: "1" },
   { label: "Tuesday", value: "2" },
@@ -270,8 +274,8 @@ export function AddCoachSheet() {
                             <SelectContent>
                               {times.map((t) => (
                                 <SelectItem
-                                  key={t}
-                                  value={t}
+                                  key={t.label}
+                                  value={t.value}
                                   disabled={
                                     !!(
                                       currentWeekday &&
@@ -281,7 +285,7 @@ export function AddCoachSheet() {
                                     )
                                   }
                                 >
-                                  {t}
+                                  {t.label}
                                 </SelectItem>
                               ))}
                             </SelectContent>
