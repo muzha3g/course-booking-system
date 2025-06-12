@@ -49,24 +49,18 @@ export const generateCourseFromCoach = async (days = 14) => {
     const currentDayIndex = currentDate.getDay();
 
     for (const coach of coaches) {
-      for (const { courseType, time, weekday } of coach.availableTimes) {
+      for (const availableTimes of coach.availableTimes) {
+        const { courseType, time, weekday } = availableTimes;
         if (Number(weekday) === currentDayIndex) {
-          const hour = Number(time.slice(0, 2));
-
-          // const datetime = new Date(currentDate);
-          // datetime.setHours(hour, 0, 0, 0);
-          // const start = datetime.toISOString();
-          // datetime.setHours(hour + 1, 0, 0, 0);
-          // const end = datetime.toISOString();
-          // const iso = datetime.toISOString();
+          const hour = Number(time);
 
           let startDatetime = setHours(currentDate, hour);
           startDatetime = setMinutes(startDatetime, 0);
           startDatetime = setSeconds(startDatetime, 0);
-          startDatetime = setMilliseconds(startDatetime, 0); // Ensure no milliseconds
+          startDatetime = setMilliseconds(startDatetime, 0);
           const startISO = startDatetime.toISOString();
 
-          let endDatetime = setHours(startDatetime, hour + 1); // Use startDatetime as base
+          let endDatetime = setHours(startDatetime, hour + 1);
           endDatetime = setMinutes(endDatetime, 0);
           endDatetime = setSeconds(endDatetime, 0);
           endDatetime = setMilliseconds(endDatetime, 0);
@@ -93,7 +87,10 @@ export const generateCourseFromCoach = async (days = 14) => {
             coachName: coach.name,
             coachDescription: coach.description,
             courseType,
-            date: format(startDatetime, "yyyy-MM-dd") + " " + time,
+            date:
+              format(startDatetime, "yyyy-MM-dd") +
+              " " +
+              `${hour}:00 - ${hour + 1}:00`,
             reservations: [],
             start: startISO,
             end: endISO,
