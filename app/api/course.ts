@@ -1,3 +1,4 @@
+import { QuerySnapshot } from "./../../node_modules/@firebase/firestore-types/index.d";
 import {
   collection,
   getDocs,
@@ -18,6 +19,17 @@ import {
 import { getCoaches } from "./coach";
 import { Course, Coach } from "@/types";
 
+export const getCourse = async (courseId: string) => {
+  try {
+    const convertedCourseId = courseId.replace(/%3A/g, ":");
+    const courses = await getCourses();
+    return courses.find((course) => course.id == convertedCourseId);
+  } catch (error) {
+    console.error("Error fetching course", error);
+    throw new Error("Failed to fetch course.");
+  }
+};
+
 export const getCourses = async () => {
   try {
     const courses: Course[] = [];
@@ -27,8 +39,8 @@ export const getCourses = async () => {
     });
     return courses;
   } catch (error) {
-    console.error("Error fetching coaches:", error);
-    throw new Error("Failed to fetch coaches.");
+    console.error("Error fetching course:", error);
+    throw new Error("Failed to fetch course.");
   }
 };
 
