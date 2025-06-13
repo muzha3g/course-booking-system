@@ -1,0 +1,9 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+export default function BackToLastPageButton() {
+  const handleBackButtonClick = () => {
+    window.history.back();
+  };
+  return <Button onClick={handleBackButtonClick}>Back</Button>;
+}
