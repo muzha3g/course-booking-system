@@ -16,7 +16,7 @@ export type Course = {
   coachId: string;
   coachName: string;
   coachDescription: string;
-  courseType: string;
+  title: string;
   date: string;
   reservations: [];
   start: string;

@@ -35,7 +35,7 @@ export const getCourses = async () => {
 export const addCourseToFirebase = async (course: Course) => {
   await setDoc(doc(db, "course", course.id), course);
   console.log(
-    `[CREATE] 新課程：${course.coachName} - ${course.courseType} @ ${course.date}`
+    `[CREATE] 新課程：${course.coachName} - ${course.title} @ ${course.date}`
   );
 };
 
@@ -86,7 +86,7 @@ export const generateCourseFromCoach = async (days = 14) => {
             coachId: coach.id,
             coachName: coach.name,
             coachDescription: coach.description,
-            courseType,
+            title: courseType,
             date:
               format(startDatetime, "yyyy-MM-dd") +
               " " +
