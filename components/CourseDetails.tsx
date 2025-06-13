@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import { CiCalendar } from "react-icons/ci";
 import { IoTimeOutline } from "react-icons/io5";
+import Image from "next/image";
+import testImage from "@/public/test.png";
 
 import { getCourse } from "@/app/api/course";
 import { useEffect, useState } from "react";
@@ -23,7 +25,7 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
   useEffect(() => {
     const getRole = localStorage.getItem("role");
     setRole(getRole);
-    console.log("get", role);
+    console.log("get role in course details-->", role, role === "admin");
   });
 
   useEffect(() => {
@@ -59,19 +61,38 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
               {course.date.slice(10)}
             </div>
           </CardDescription>
-
-          <CardAction>{course.coachName}</CardAction>
+          {role === "admin" && <CardAction>{course.coachName}</CardAction>}
         </CardHeader>
-        {course.reservations.length > 0 ? (
-          <CardContent>
-            <p>Students</p>
-            <Card>
-              <CardContent>Students Name</CardContent>
-            </Card>
-          </CardContent>
+
+        {role === "admin" ? (
+          course.reservations.length > 0 ? (
+            <CardContent>
+              <p>Students</p>
+              <Card>
+                <CardContent>Students Name</CardContent>
+              </Card>
+            </CardContent>
+          ) : (
+            <CardContent className="text-center text-gray-500">
+              No Reservation
+            </CardContent>
+          )
         ) : (
-          <CardContent className="text-center text-gray-500">
-            No Reservation
+          <CardContent>
+            <hr />
+            <div className="flex shrink-0 grow-0 items-start ">
+              <Image
+                src={testImage}
+                alt=""
+                width={150}
+                height={150}
+                priority={true}
+              />
+              <div className="p-6">
+                <p className="text-lg font-bold"> {course.coachName}</p>
+                <p>{course.coachDescription}</p>
+              </div>
+            </div>
           </CardContent>
         )}
       </Card>
