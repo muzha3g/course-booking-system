@@ -2,8 +2,9 @@ import React from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import momentTimezonePlugin from "@fullcalendar/moment-timezone";
+import { Course } from "@/types";
 
-const CalendarComponent = () => {
+export const Calendar = ({ course }: { course: Course[] }) => {
   return (
     <FullCalendar
       plugins={[timeGridPlugin, momentTimezonePlugin]}
@@ -23,15 +24,7 @@ const CalendarComponent = () => {
         minute: "2-digit",
         hour12: false,
       }}
-      events={[
-        {
-          title: "Sample Event",
-          start: "2025-06-13T10:00:00Z",
-          end: "2025-06-13T12:00:00Z",
-        },
-      ]}
+      events={course}
     />
   );
 };
-
-export default CalendarComponent;
