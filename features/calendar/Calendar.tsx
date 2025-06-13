@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getCourses } from "@/app/api/course";
 
-export const Calendar = () => {
+export const Calendar = ({ state }: { state: string }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -51,7 +51,11 @@ export const Calendar = () => {
       events={courses}
       eventClick={(info) => {
         const eventObject = info.event;
-        router.push("./courseDetails/" + eventObject.id);
+        if (state === "user") {
+          router.push("./user/courseDetails/" + eventObject.id);
+        } else if (state === "admin") {
+          router.push("./courseDetails/" + eventObject.id);
+        }
       }}
     />
   );
