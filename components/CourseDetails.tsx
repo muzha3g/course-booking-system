@@ -18,6 +18,13 @@ import { Course } from "@/types";
 export default function CourseDetails({ courseId }: { courseId: string }) {
   const [loading, setLoading] = useState<Boolean>(true);
   const [course, setCourse] = useState<Course>();
+  const [role, setRole] = useState<string | null>("");
+
+  useEffect(() => {
+    const getRole = localStorage.getItem("role");
+    setRole(getRole);
+    console.log("get", role);
+  });
 
   useEffect(() => {
     try {

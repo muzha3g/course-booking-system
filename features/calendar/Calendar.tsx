@@ -8,10 +8,20 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getCourses } from "@/app/api/course";
 
-export const Calendar = ({ state }: { state: string }) => {
+export const Calendar = ({ role }: { role: string }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+
+  useEffect(() => {
+    if (role === "user") {
+      window.localStorage.setItem("role", role);
+    } else if (role === "admin") {
+      window.localStorage.setItem("role", role);
+    } else {
+      throw new Error("Invalid role");
+    }
+  }, [role]);
 
   useEffect(() => {
     try {
@@ -51,9 +61,9 @@ export const Calendar = ({ state }: { state: string }) => {
       events={courses}
       eventClick={(info) => {
         const eventObject = info.event;
-        if (state === "user") {
+        if (role === "user") {
           router.push("./user/courseDetails/" + eventObject.id);
-        } else if (state === "admin") {
+        } else if (role === "admin") {
           router.push("./courseDetails/" + eventObject.id);
         }
       }}
