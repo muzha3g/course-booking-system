@@ -12,8 +12,6 @@ import { useEffect, useState } from "react";
 import { Course } from "@/types";
 
 export default function Page() {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   const handleLogout = () => {
@@ -25,22 +23,6 @@ export default function Page() {
         console.error("Logout failed:", error);
       });
   };
-
-  useEffect(() => {
-    try {
-      const fetchCourses = async () => {
-        const fetchedCourses = await getCourses();
-        setCourses(fetchedCourses);
-      };
-      fetchCourses();
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  if (loading) return <>Loading</>;
 
   return (
     <>
@@ -57,7 +39,7 @@ export default function Page() {
             <TabsTrigger value="Coach">Coach</TabsTrigger>
           </TabsList>
           <TabsContent value="Schedule">
-            <Calendar course={courses} />
+            <Calendar />
           </TabsContent>
           <TabsContent value="Coach">
             <CoachSection />

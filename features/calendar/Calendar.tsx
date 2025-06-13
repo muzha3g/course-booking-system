@@ -1,12 +1,34 @@
-import React from "react";
+"use client";
+
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import momentTimezonePlugin from "@fullcalendar/moment-timezone";
 import { Course } from "@/types";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getCourses } from "@/app/api/course";
 
-export const Calendar = ({ course }: { course: Course[] }) => {
+export const Calendar = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+
+  useEffect(() => {
+    try {
+      const fetchCourses = async () => {
+        const fetchedCourses = await getCourses();
+        setCourses(fetchedCourses);
+      };
+      fetchCourses();
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading) return <>Loading</>;
+
   return (
     <FullCalendar
       plugins={[timeGridPlugin, momentTimezonePlugin]}
@@ -26,7 +48,7 @@ export const Calendar = ({ course }: { course: Course[] }) => {
         minute: "2-digit",
         hour12: false,
       }}
-      events={course}
+      events={courses}
       eventClick={(info) => {
         const eventObject = info.event;
         router.push("./courseDetails/" + eventObject.id);
