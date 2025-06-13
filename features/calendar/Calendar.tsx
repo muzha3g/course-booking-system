@@ -18,17 +18,17 @@ const CalendarComponent = () => {
       slotMaxTime={"22:00:00"}
       slotDuration={"00:30:00"}
       eventColor="black"
+      eventTimeFormat={{
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }}
       events={[
         {
           title: "Sample Event",
           start: "2025-06-13T10:00:00Z",
           end: "2025-06-13T12:00:00Z",
         },
-        // {
-        //   title: "Other Event",
-        //   start: "2025-06-13T10:00:00",
-        //   end: "2025-06-13T12:00:00",
-        // },
       ]}
     />
   );
