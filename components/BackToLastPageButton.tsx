@@ -5,5 +5,9 @@ export default function BackToLastPageButton() {
   const handleBackButtonClick = () => {
     window.history.back();
   };
-  return <Button onClick={handleBackButtonClick}>Back</Button>;
+  return (
+    <Button onClick={handleBackButtonClick} variant={"secondary"}>
+      Back
+    </Button>
+  );
 }
