@@ -3,8 +3,10 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import momentTimezonePlugin from "@fullcalendar/moment-timezone";
 import { Course } from "@/types";
+import { useRouter } from "next/navigation";
 
 export const Calendar = ({ course }: { course: Course[] }) => {
+  const router = useRouter();
   return (
     <FullCalendar
       plugins={[timeGridPlugin, momentTimezonePlugin]}
@@ -25,6 +27,10 @@ export const Calendar = ({ course }: { course: Course[] }) => {
         hour12: false,
       }}
       events={course}
+      eventClick={(info) => {
+        const eventObject = info.event;
+        router.push("./courseDetails/" + eventObject.id);
+      }}
     />
   );
 };
