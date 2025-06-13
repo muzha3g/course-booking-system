@@ -8,6 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { CiCalendar } from "react-icons/ci";
+import { IoTimeOutline } from "react-icons/io5";
 
 import { getCourse } from "@/app/api/course";
 import { useEffect, useState } from "react";
@@ -35,12 +37,23 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
   if (loading || !course) return <div> Loading...</div>;
 
   return (
-    <div className="flex justify-center items-center w-full">
+    <div className="flex justify-center items-baseline w-full">
       <Card className="w-1/2">
         <CardHeader>
-          <CardTitle>{course.title}</CardTitle>
-          <CardDescription>{course.coachName}</CardDescription>
-          <CardAction>{course.date}</CardAction>
+          <CardTitle className="text-xl">{course.title}</CardTitle>
+          <CardDescription>
+            {" "}
+            <div className="text-gray-700 flex items-center gap-2">
+              <CiCalendar />
+              {course.date.slice(0, 10)}
+            </div>
+            <div className="text-gray-700 flex items-center gap-2">
+              <IoTimeOutline />
+              {course.date.slice(10)}
+            </div>
+          </CardDescription>
+
+          <CardAction>{course.coachName}</CardAction>
         </CardHeader>
         {course.reservations.length > 0 ? (
           <CardContent>

@@ -29,7 +29,6 @@ export const Calendar = ({ course }: { course: Course[] }) => {
       events={course}
       eventClick={(info) => {
         const eventObject = info.event;
-        alert(eventObject.id);
         router.push("./courseDetails/" + eventObject.id);
       }}
     />
