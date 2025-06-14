@@ -31,7 +31,9 @@ import {
 
 import { useFieldArray } from "react-hook-form";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+
+import { Context } from "@/context";
 
 const times = Array.from({ length: 13 }, (_, i) => ({
   label: `${String(i + 9).padStart(2, "0")}:00 - ${String(i + 10).padStart(
@@ -70,6 +72,8 @@ const FormSchema = z.object({
 });
 
 export function AddCoachSheet() {
+  const { countOnCreateNewCoach, setCountOnCreateNewCoach } =
+    useContext(Context);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -83,6 +87,7 @@ export function AddCoachSheet() {
     try {
       await addDoc(collection(db, "coach"), data);
       form.reset();
+      setCountOnCreateNewCoach(countOnCreateNewCoach + 1);
       setIsSheetOpen(false);
     } catch (error) {
       console.error("Error adding coach:", error);
