@@ -25,7 +25,6 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
   useEffect(() => {
     const getRole = localStorage.getItem("role");
     setRole(getRole);
-    // console.log("get role in course details-->", role, role === "admin");
   });
 
   useEffect(() => {
@@ -67,10 +66,14 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
         {role === "admin" ? (
           course.reservations.length > 0 ? (
             <CardContent>
-              <p>Students</p>
-              <Card>
-                <CardContent>Students Name</CardContent>
-              </Card>
+              <p className="text-base font-bold">Students</p>
+              <div className="grid grid-cols-2 gap-3 my-2">
+                {course.reservations.map((data, index) => (
+                  <Card key={index} className="">
+                    <CardContent>{data.userName}</CardContent>
+                  </Card>
+                ))}
+              </div>
             </CardContent>
           ) : (
             <CardContent className="text-center text-gray-500">
