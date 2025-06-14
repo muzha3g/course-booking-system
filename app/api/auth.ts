@@ -20,6 +20,7 @@ export async function handleUserLogin(
   const password = name + phone;
 
   try {
+    // new user
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -32,6 +33,7 @@ export async function handleUserLogin(
         return bookingResult;
       })
       .catch((error) => {
+        // if user already in Authentication DB
         if (error.code === "auth/email-already-in-use") {
           signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
