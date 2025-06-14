@@ -48,6 +48,7 @@ export default function CourseBookingButton({
               <Input
                 id="name"
                 name="name"
+                value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
@@ -56,6 +57,7 @@ export default function CourseBookingButton({
               <Input
                 id="phone-number"
                 name="phone-number"
+                value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
