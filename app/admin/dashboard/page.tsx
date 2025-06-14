@@ -24,6 +24,8 @@ export default function Page() {
       });
   };
 
+  const role = "admin";
+
   return (
     <>
       <nav className="flex justify-end pt-10 pr-10">
@@ -39,7 +41,7 @@ export default function Page() {
             <TabsTrigger value="Coach">Coach</TabsTrigger>
           </TabsList>
           <TabsContent value="Schedule">
-            <Calendar />
+            <Calendar role={role} />
           </TabsContent>
           <TabsContent value="Coach">
             <CoachSection />
