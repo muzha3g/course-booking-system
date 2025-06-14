@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function CourseBookingButton({
   courseId,
@@ -22,7 +22,13 @@ export default function CourseBookingButton({
 }) {
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const handleClick = () => {};
+  const handleClick = () => {
+    if (name.trim() == "" || phoneNumber.trim() === "") {
+      alert(" please fill out all the fields");
+    } else {
+      alert(name + " " + phoneNumber);
+    }
+  };
   return (
     <Dialog>
       <form>
