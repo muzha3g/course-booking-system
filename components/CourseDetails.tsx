@@ -25,7 +25,7 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
   useEffect(() => {
     const getRole = localStorage.getItem("role");
     setRole(getRole);
-    console.log("get role in course details-->", role, role === "admin");
+    // console.log("get role in course details-->", role, role === "admin");
   });
 
   useEffect(() => {

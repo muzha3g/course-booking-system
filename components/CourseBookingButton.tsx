@@ -27,10 +27,14 @@ export default function CourseBookingButton({
     if (name.trim() == "" || phone.trim() === "") {
       alert("please fill out all the fields");
     } else {
-      const user = await handleUserLogin(name, phone);
-      if (user) {
-        alert("result" + user);
-      }
+      handleUserLogin(name, phone)
+        .then(() => {
+          console.log("done");
+        })
+        .catch((e) => alert(e));
+
+      setName("");
+      setPhone("");
     }
   };
 
@@ -71,9 +75,11 @@ export default function CourseBookingButton({
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" onClick={handleClick}>
-              Submit
-            </Button>
+            <DialogClose asChild>
+              <Button type="submit" onClick={handleClick}>
+                Submit
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </DialogContent>
       </form>
