@@ -13,8 +13,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState, useEffect } from "react";
 
 export default function CourseBookingButton() {
+  const [name, setName] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const handleClick = () => {};
   return (
     <Dialog>
       <form>
@@ -31,18 +35,28 @@ export default function CourseBookingButton() {
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="name">Real Name</Label>
-              <Input id="name" name="name" />
+              <Input
+                id="name"
+                name="name"
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="phone-number">Phone Number</Label>
-              <Input id="phone-number" name="phone-number" />
+              <Input
+                id="phone-number"
+                name="phone-number"
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
             </div>
           </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" onClick={handleClick}>
+              Submit
+            </Button>
           </DialogFooter>
         </DialogContent>
       </form>
