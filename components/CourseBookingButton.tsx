@@ -15,7 +15,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 
-export default function CourseBookingButton() {
+export default function CourseBookingButton({
+  courseId,
+}: {
+  courseId: string;
+}) {
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const handleClick = () => {};

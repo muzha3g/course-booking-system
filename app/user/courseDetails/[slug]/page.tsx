@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     <div className="min-h-screen flex flex-col items-center py-24 gap-10">
       <CourseDetails courseId={slug} />
       <div className="flex flex-col gap-5">
-        <CourseBookingButton />
+        <CourseBookingButton courseId={slug} />
         <BackToLastPageButton />
       </div>
     </div>
