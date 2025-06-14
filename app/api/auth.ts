@@ -32,7 +32,19 @@ export async function handleUserLogin(
         return bookingResult;
       })
       .catch((error) => {
-        console.log("Error from handleUserLogin: " + error);
+        if (error.code === "auth/email-already-in-use") {
+          signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log("signInWithEmailAndPassword: " + user.displayName);
+              return addUserToCourseReservation(courseId, user.uid, name);
+            })
+            .then((bookingResult) => {
+              console.log(bookingResult);
+            });
+          return;
+        }
+        console.log("Error from handleUserLogin: " + error.code);
       });
   } catch (e: any) {
     console.log("e.code Error from handleUserLogin -->", e.code);

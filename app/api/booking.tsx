@@ -17,14 +17,18 @@ export const addUserToCourseReservation = async (
     console.log("userName:", userName);
 
     const isUserBookAlready = courseToBook?.reservations.some(
-      (data) => (data = { userId, userName })
+      (data) => data.userId === userId
     );
     if (isUserBookAlready) {
       return "User already booked this course.";
     } else {
-      await updateDoc(courseToBookRef, {
+      //   await updateDoc(courseToBookRef, {
+      //     reservations: arrayUnion({ userId, userName }),
+      //   });
+
+      updateDoc(courseToBookRef, {
         reservations: arrayUnion({ userId, userName }),
-      });
+      }).then(() => {});
 
       return "Booking Success";
     }
