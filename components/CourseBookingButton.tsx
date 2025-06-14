@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { handleUserLogin } from "@/lib/auth";
 
 export default function CourseBookingButton({
   courseId,
@@ -21,14 +22,18 @@ export default function CourseBookingButton({
   courseId: string;
 }) {
   const [name, setName] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const handleClick = () => {
-    if (name.trim() == "" || phoneNumber.trim() === "") {
-      alert(" please fill out all the fields");
+  const [phone, setPhone] = useState<string>("");
+  const handleClick = async () => {
+    if (name.trim() == "" || phone.trim() === "") {
+      alert("please fill out all the fields");
     } else {
-      alert(name + " " + phoneNumber);
+      const user = await handleUserLogin(name, phone);
+      if (user) {
+        alert("result" + user);
+      }
     }
   };
+
   return (
     <Dialog>
       <form>
@@ -57,8 +62,8 @@ export default function CourseBookingButton({
               <Input
                 id="phone-number"
                 name="phone-number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
           </div>
