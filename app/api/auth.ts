@@ -5,11 +5,17 @@ import {
   updateProfile,
 } from "firebase/auth";
 
+import { addUserToCourseReservation } from "./booking";
+
 function phoneToEmail(phone: string) {
   return `${phone}@g.com`;
 }
 
-export async function handleUserLogin(name: string, phone: string) {
+export async function handleUserLogin(
+  courseId: string,
+  name: string,
+  phone: string
+) {
   const email = phoneToEmail(phone);
   const password = name + phone;
 
@@ -19,7 +25,11 @@ export async function handleUserLogin(name: string, phone: string) {
         const user = userCredential.user;
         updateProfile(auth.currentUser, { displayName: name });
         console.log("User created successfully:", user);
-        return user;
+        return addUserToCourseReservation(courseId, user.uid, name);
+      })
+      .then((bookingResult) => {
+        console.log(bookingResult);
+        return bookingResult;
       })
       .catch((error) => {
         console.log("Error from handleUserLogin: " + error);

@@ -29,7 +29,7 @@ export default function CourseBookingButton({
     if (name.trim() == "" || phone.trim() === "") {
       alert("please fill out all the fields");
     } else {
-      handleUserLogin(name, phone)
+      handleUserLogin(courseId, name, phone)
         .then(() => {
           toast("Booking successfully");
         })
