@@ -37,8 +37,9 @@ export default function Page({ params }: paramsProps) {
   const [cancelTrigger, setCancelTrigger] = useState<number>(1);
 
   const handleCancelBooking = (courseId: string) => {
-    deleteUserFromCourseReservation(userIdSlug, courseId);
-    setCancelTrigger(cancelTrigger + 1);
+    deleteUserFromCourseReservation(userIdSlug, courseId).then(() => {
+      setCancelTrigger(cancelTrigger + 1);
+    });
   };
 
   const handleLogout = () => {
@@ -48,7 +49,6 @@ export default function Page({ params }: paramsProps) {
 
   useEffect(() => {
     const unsubscribe = subscribeToAuthChanges((currentUser: any) => {
-      console.log("onAuthStateChanged callback:", currentUser.displayName);
       setUser(currentUser.displayName);
       setLoading(false);
     });

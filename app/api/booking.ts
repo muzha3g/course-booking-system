@@ -41,11 +41,10 @@ export async function deleteUserFromCourseReservation(
   courseId: string
 ) {
   const courseRef = doc(db, "course", courseId);
-  const courseSnap = await getDoc(courseRef);
-  const course = courseSnap.data();
-
-  const reservations = course?.reservations;
-  const newReservations = reservations.filter((data) => data.userId !== userId);
+  const course = await getCourse(courseId);
+  const newReservations = course?.reservations.filter(
+    (data) => data.userId !== userId
+  );
   console.log(newReservations);
   await updateDoc(courseRef, {
     reservations: newReservations,
