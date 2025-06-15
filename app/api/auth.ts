@@ -60,3 +60,18 @@ export async function handleUserLogin(
     console.log("Error from handleUserLogin(Catch): ", error.code);
   }
 }
+
+export async function handleUserLoginToSearchBooking(phone: string) {
+  const email = phoneToEmail(phone);
+  const password = "default"; // move to ev
+
+  try {
+    const userData = await signInWithEmailAndPassword(auth, email, password);
+    return userData;
+  } catch (error: any) {
+    if (error.code === "auth/invalid-credential") {
+      return "This phone number hasn't book any courses.";
+    }
+    return error.code;
+  }
+}

@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { z } from "zod";
+import { handleUserLoginToSearchBooking } from "@/app/api/auth";
 
 export default function CourseBookingSearchAndCancelButton() {
   const [phone, setPhone] = useState<string>("");
@@ -27,7 +28,7 @@ export default function CourseBookingSearchAndCancelButton() {
       .regex(/^\d{10}$/, { message: "Phone number must be 10 digits." }),
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationResult = InputSchema.safeParse({ phone });
 
@@ -40,11 +41,17 @@ export default function CourseBookingSearchAndCancelButton() {
       return;
     }
 
-    console.log("Validation Success:", validationResult.data);
-    console.log("Form submitted successfully!");
+    // console.log("Validation Success:", validationResult.data);
+    // console.log("Form submitted successfully!");
 
     try {
-    } catch {}
+      const result = await handleUserLoginToSearchBooking(phone);
+      console.log("result: ", result);
+      setPhone("");
+      setErrorMessage("");
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   return (
