@@ -2,7 +2,6 @@
 
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -14,6 +13,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { getUserBookingCourses } from "@/app/api/user";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface paramsProps {
   params: Promise<{
@@ -23,11 +23,13 @@ interface paramsProps {
 
 import { Course } from "@/types";
 import { deleteUserFromCourseReservation } from "@/app/api/booking";
-import { record } from "zod";
+import { logout } from "@/app/api/auth";
 
 export default function Page({ params }: paramsProps) {
   const resolvedParams = React.use(params);
   const userIdSlug = resolvedParams.slug;
+
+  const router = useRouter();
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,6 +39,11 @@ export default function Page({ params }: paramsProps) {
   const handleCancelBooking = (courseId: string) => {
     deleteUserFromCourseReservation(userIdSlug, courseId);
     setCancelTrigger(cancelTrigger + 1);
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/user");
   };
 
   useEffect(() => {
@@ -67,38 +74,43 @@ export default function Page({ params }: paramsProps) {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-24 gap-10">
-      <Card className="w-1/2">
-        <CardHeader>
-          <CardTitle>Hi {user}</CardTitle>
-        </CardHeader>
+    <>
+      <nav className="flex justify-end p-8 ">
+        <Button onClick={handleLogout}>Logout</Button>
+      </nav>
+      <div className="min-h-screen flex flex-col items-center py-10 gap-10">
+        <Card className="w-1/2">
+          <CardHeader>
+            <CardTitle>Hi {user}</CardTitle>
+          </CardHeader>
 
-        <CardContent>
-          <p>{bookingRecord ? "No Booking Record" : "Booking Record"}</p>
-          <section>
-            {bookingRecord &&
-              bookingRecord?.map((record) => (
-                <Card
-                  key={record.id}
-                  className="flex flex-row justify-between p-3 gap-1"
-                >
-                  <div>
-                    <CardDescription>
-                      {record.title} ░ {record.coachName}
-                    </CardDescription>
-                    <CardDescription>{record.date}</CardDescription>
-                  </div>
-                  <Button
-                    variant={"secondary"}
-                    onClick={() => handleCancelBooking(record.id)}
+          <CardContent>
+            <p>{bookingRecord ? "No Booking Record" : "Booking Record"}</p>
+            <section>
+              {bookingRecord &&
+                bookingRecord?.map((record) => (
+                  <Card
+                    key={record.id}
+                    className="flex flex-row justify-between p-3 gap-1"
                   >
-                    Cancel
-                  </Button>
-                </Card>
-              ))}
-          </section>
-        </CardContent>
-      </Card>
-    </div>
+                    <div>
+                      <CardDescription>
+                        {record.title} ░ {record.coachName}
+                      </CardDescription>
+                      <CardDescription>{record.date}</CardDescription>
+                    </div>
+                    <Button
+                      variant={"secondary"}
+                      onClick={() => handleCancelBooking(record.id)}
+                    >
+                      Cancel
+                    </Button>
+                  </Card>
+                ))}
+            </section>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }

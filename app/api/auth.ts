@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  signOut,
 } from "firebase/auth";
 
 import { addUserToCourseReservation } from "./booking";
@@ -74,4 +75,14 @@ export async function handleUserLoginToSearchBooking(phone: string) {
     }
     return error.code;
   }
+}
+
+export function logout() {
+  signOut(auth)
+    .then(() => {
+      console.log("Sign-out successful.");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
