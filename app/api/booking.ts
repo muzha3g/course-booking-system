@@ -1,16 +1,17 @@
 import { doc, setDoc, arrayUnion, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { getCourse } from "./course";
 
 type Data = {
   userId: string;
   userName: string;
 };
 
-export const addUserToCourseReservation = async (
+export async function addUserToCourseReservation(
   courseId: string,
   userId: string,
   userName: string
-) => {
+) {
   try {
     const convertedCourseId = courseId.replace(/%3A/g, ":");
     const courseToBookRef = doc(db, "course", convertedCourseId);
@@ -32,4 +33,20 @@ export const addUserToCourseReservation = async (
   } catch (e) {
     throw new Error("Failed to addUserToCourseReservation.");
   }
-};
+}
+
+export async function deleteUserFromCourseReservation(
+  userId: string,
+  courseId: string
+) {
+  const courseRef = doc(db, "course", courseId);
+  const courseSnap = await getDoc(courseRef);
+  const course = courseSnap.data();
+
+  const reservations = course?.reservations;
+  const newReservations = reservations.filter((data) => data.userId !== userId);
+  console.log(newReservations);
+  await updateDoc(courseRef, {
+    reservations: newReservations,
+  });
+}

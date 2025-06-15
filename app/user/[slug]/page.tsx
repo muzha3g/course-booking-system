@@ -22,6 +22,8 @@ interface paramsProps {
 }
 
 import { Course } from "@/types";
+import { deleteUserFromCourseReservation } from "@/app/api/booking";
+import { record } from "zod";
 
 export default function Page({ params }: paramsProps) {
   const resolvedParams = React.use(params);
@@ -30,6 +32,12 @@ export default function Page({ params }: paramsProps) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingRecord, setBookingRecord] = useState<Course[]>();
+  const [cancelTrigger, setCancelTrigger] = useState<number>(1);
+
+  const handleCancelBooking = (courseId: string) => {
+    deleteUserFromCourseReservation(userIdSlug, courseId);
+    setCancelTrigger(cancelTrigger + 1);
+  };
 
   useEffect(() => {
     const unsubscribe = subscribeToAuthChanges((currentUser: any) => {
@@ -54,7 +62,7 @@ export default function Page({ params }: paramsProps) {
     };
 
     fetchBookingData();
-  }, [userIdSlug]);
+  }, [cancelTrigger, userIdSlug]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -63,12 +71,11 @@ export default function Page({ params }: paramsProps) {
       <Card className="w-1/2">
         <CardHeader>
           <CardTitle>Hi {user}</CardTitle>
-          <CardDescription>Below is your booking record.</CardDescription>
         </CardHeader>
 
         <CardContent>
-          <p>Booking Record</p>
-          <section className="">
+          <p>{bookingRecord ? "No Booking Record" : "Booking Record"}</p>
+          <section>
             {bookingRecord &&
               bookingRecord?.map((record) => (
                 <Card
@@ -81,7 +88,12 @@ export default function Page({ params }: paramsProps) {
                     </CardDescription>
                     <CardDescription>{record.date}</CardDescription>
                   </div>
-                  <Button variant={"secondary"}>Cancel</Button>
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => handleCancelBooking(record.id)}
+                  >
+                    Cancel
+                  </Button>
                 </Card>
               ))}
           </section>
