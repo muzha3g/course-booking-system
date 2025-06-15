@@ -69,7 +69,7 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
               <p className="text-base font-bold">Students</p>
               <div className="grid grid-cols-2 gap-3 my-2">
                 {course.reservations.map((data, index) => (
-                  <Card key={index} className="">
+                  <Card key={index}>
                     <CardContent>{data.userName}</CardContent>
                   </Card>
                 ))}

@@ -1,7 +1,7 @@
 "use client";
 
-import { CoachCard } from "./components/CoachCard";
-import { AddCoachSheet } from "./components/AddCoachSheet";
+import { CoachCard } from "@/components/CoachCard";
+import { AddCoachSheet } from "@/components/AddCoachSheet";
 import { getCoaches } from "@/app/api/coach";
 import { useEffect, useState, useContext } from "react";
 import { Context } from "@/context";
@@ -24,7 +24,7 @@ export default function CoachSection() {
     <main className="p-1 py-2">
       <AddCoachSheet />
       <section className="grid grid-cols-4 gap-5 py-5">
-        {coachList.map((coach, index) => (
+        {coachList?.map((coach, index) => (
           <CoachCard key={index} coachName={coach.name} />
         ))}
       </section>

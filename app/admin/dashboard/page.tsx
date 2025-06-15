@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import CoachSection from "@/features/coach/CoachSection";
+import CoachSection from "@/components/CoachSection";
 import { Calendar } from "@/components/Calendar";
 
 export default function Page() {
