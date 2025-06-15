@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import CoachSection from "@/features/coach/CoachSection";
-import { Calendar } from "@/features/calendar/Calendar";
+import { Calendar } from "@/components/Calendar";
 
 export default function Page() {
   const router = useRouter();

@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar } from "@/features/calendar/Calendar";
+import { Calendar } from "@/components/Calendar";
 import { Button } from "@/components/ui/button";
 import CourseBookingButton from "@/components/CourseBookingButton";
 import CourseBookingSearchAndCancelButton from "@/components/CourseBookingSearchAndCancelButton";
