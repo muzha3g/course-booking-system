@@ -28,15 +28,22 @@ export default function CourseBookingButton({
   const handleClick = async () => {
     if (name.trim() == "" || phone.trim() === "") {
       alert("please fill out all the fields");
-    } else {
-      handleUserLogin(courseId, name, phone)
-        .then(() => {
-          toast("Booking successfully");
-        })
-        .catch((e) => alert(e));
+    }
+
+    try {
+      const result = await handleUserLogin(courseId, name, phone);
+      console.log("Booking result:", result);
+      if (result === "User already booked this course.") {
+        toast(result);
+      } else {
+        toast("Booking successfully");
+      }
 
       setName("");
       setPhone("");
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Booking failed. Please try again.");
     }
   };
 
