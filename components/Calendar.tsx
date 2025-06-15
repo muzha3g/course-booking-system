@@ -13,6 +13,10 @@ export const Calendar = ({ role }: { role: string }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
+  const coursesAfterToday = courses.filter(
+    (course) => course.start > new Date().toISOString()
+  );
+
   useEffect(() => {
     if (role === "user") {
       window.localStorage.setItem("role", role);
@@ -58,7 +62,7 @@ export const Calendar = ({ role }: { role: string }) => {
         minute: "2-digit",
         hour12: false,
       }}
-      events={courses}
+      events={coursesAfterToday}
       eventClick={(info) => {
         const eventObject = info.event;
         if (role === "user") {
