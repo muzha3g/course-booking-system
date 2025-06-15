@@ -17,6 +17,7 @@ import { useState } from "react";
 import { handleUserLogin } from "@/app/api/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export default function CourseBookingButton({
   courseId,
@@ -25,9 +26,21 @@ export default function CourseBookingButton({
 }) {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const handleClick = async () => {
-    if (name.trim() == "" || phone.trim() === "") {
-      alert("please fill out all the fields");
+  const [nameErrorMessage, setNameErrorMessage] = useState<string>("");
+  const [phoneErrorMessage, setPhoneErrorMessage] = useState<string>("");
+
+  const handleSubmit = async () => {
+    const validationResult = InputSchema.safeParse({ phone, name });
+
+    if (!validationResult.success) {
+      validationResult.error.errors.forEach((err) => {
+        if (err.path[0] === "name") {
+          setNameErrorMessage(err.message);
+        } else if (err.path[0] === "phone") {
+          setPhoneErrorMessage(err.message);
+        }
+      });
+      return;
     }
 
     try {
@@ -46,6 +59,14 @@ export default function CourseBookingButton({
       alert("Booking failed. Please try again.");
     }
   };
+
+  const InputSchema = z.object({
+    phone: z
+      .string()
+      .min(1, { message: "Phone number is required." })
+      .regex(/^\d{10}$/, { message: "Phone number must be 10 digits." }),
+    name: z.string().min(1, { message: "Name is required." }),
+  });
 
   return (
     <>
@@ -69,8 +90,15 @@ export default function CourseBookingButton({
                   id="name"
                   name="name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  className={nameErrorMessage && "border-red-500"}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setNameErrorMessage("");
+                  }}
                 />
+                {nameErrorMessage && (
+                  <p className="text-red-500 text-sm">{nameErrorMessage}</p>
+                )}
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="phone-number">Phone Number</Label>
@@ -78,19 +106,26 @@ export default function CourseBookingButton({
                   id="phone-number"
                   name="phone-number"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    setPhoneErrorMessage("");
+                  }}
+                  placeholder="format : 0987654321"
+                  className={phoneErrorMessage && "border-red-500"}
                 />
+                {phoneErrorMessage && (
+                  <p className="text-red-500 text-sm">{phoneErrorMessage}</p>
+                )}
               </div>
             </div>
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <DialogClose asChild>
-                <Button type="submit" onClick={handleClick}>
-                  Submit
-                </Button>
-              </DialogClose>
+
+              <Button type="submit" onClick={handleSubmit}>
+                Submit
+              </Button>
             </DialogFooter>
           </DialogContent>
         </form>
