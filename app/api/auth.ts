@@ -67,7 +67,7 @@ export async function handleUserLoginToSearchBooking(phone: string) {
 
   try {
     const userData = await signInWithEmailAndPassword(auth, email, password);
-    return userData;
+    return userData.user.uid;
   } catch (error: any) {
     if (error.code === "auth/invalid-credential") {
       return "This phone number hasn't book any courses.";

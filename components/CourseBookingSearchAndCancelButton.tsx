@@ -16,10 +16,13 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { z } from "zod";
 import { handleUserLoginToSearchBooking } from "@/app/api/auth";
+import { useRouter } from "next/navigation";
 
 export default function CourseBookingSearchAndCancelButton() {
   const [phone, setPhone] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const router = useRouter();
 
   const InputSchema = z.object({
     phone: z
@@ -45,10 +48,13 @@ export default function CourseBookingSearchAndCancelButton() {
     // console.log("Form submitted successfully!");
 
     try {
-      const result = await handleUserLoginToSearchBooking(phone);
-      console.log("result: ", result);
+      const uid = await handleUserLoginToSearchBooking(phone);
+
+      // [!]handle error message
+      console.log("result: ", uid);
       setPhone("");
       setErrorMessage("");
+      router.push(`/user/${uid}`);
     } catch (error) {
       console.log("error: ", error);
     }
