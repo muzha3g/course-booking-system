@@ -18,13 +18,14 @@ export async function handleUserLogin(
   phone: string
 ) {
   const email = phoneToEmail(phone);
-  const password = "default";
+  const password = process.env.NEXT_PUBLIC_PASSWORD;
+
   try {
     //  // Case 1 : new user
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password
+      password!
     );
     const user = userCredential.user;
 
@@ -44,7 +45,7 @@ export async function handleUserLogin(
         const userCredential = await signInWithEmailAndPassword(
           auth,
           email,
-          password
+          password!
         );
         const user = userCredential.user;
 
@@ -71,10 +72,10 @@ export async function handleUserLogin(
 
 export async function handleUserLoginToSearchBooking(phone: string) {
   const email = phoneToEmail(phone);
-  const password = "default"; // move to ev
+  const password = process.env.NEXT_PUBLIC_PASSWORD;
 
   try {
-    const userData = await signInWithEmailAndPassword(auth, email, password);
+    const userData = await signInWithEmailAndPassword(auth, email, password!);
     return userData.user.uid;
   } catch (error: any) {
     if (error.code === "auth/invalid-credential") {
