@@ -7,7 +7,7 @@ import { useEffect, useState, useContext } from "react";
 import { Context } from "@/context";
 import { Coach } from "@/types";
 
-export default function CoachSection() {
+export function CoachSection() {
   const [coachList, setCoachList] = useState<Coach[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const { countOnCreateNewCoach } = useContext(Context);

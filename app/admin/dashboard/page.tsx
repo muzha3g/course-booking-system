@@ -2,23 +2,21 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import CoachSection from "@/components/CoachSection";
+import { CoachSection } from "@/components/CoachSection";
 import { Calendar } from "@/components/Calendar";
+import { logout } from "@/app/api/auth";
 
 export default function Page() {
   const router = useRouter();
 
   const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        router.push("/admin/login");
-      })
-      .catch((error) => {
-        console.error("Logout failed:", error);
-      });
+    try {
+      logout();
+      router.push("/admin/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const role = "admin";
