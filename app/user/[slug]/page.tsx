@@ -11,7 +11,7 @@ import {
 import { subscribeToAuthChanges } from "@/app/api/user";
 import { useEffect, useState } from "react";
 import React from "react";
-import { getUserBookingCourses } from "@/app/api/user";
+import { getUserBookingCourses } from "@/app/api/booking";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 

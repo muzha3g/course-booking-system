@@ -8,14 +8,3 @@ export function subscribeToAuthChanges(callback: any) {
   });
   return unsubscribe;
 }
-
-export async function getUserBookingCourses(userId: string) {
-  const courses = await getCourses();
-
-  const bookedCourses = courses.filter((course) => {
-    return course.reservations.some(
-      (reservation) => reservation.userId === userId
-    );
-  });
-  return bookedCourses;
-}

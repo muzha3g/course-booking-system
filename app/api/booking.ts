@@ -1,6 +1,7 @@
 import { doc, setDoc, arrayUnion, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getCourse } from "./course";
+import { getCourses } from "./course";
 
 type Data = {
   userId: string;
@@ -49,4 +50,15 @@ export async function deleteUserFromCourseReservation(
   await updateDoc(courseRef, {
     reservations: newReservations,
   });
+}
+
+export async function getUserBookingCourses(userId: string) {
+  const courses = await getCourses();
+
+  const bookedCourses = courses.filter((course) => {
+    return course.reservations.some(
+      (reservation) => reservation.userId === userId
+    );
+  });
+  return bookedCourses;
 }
