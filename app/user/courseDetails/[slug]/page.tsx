@@ -1,7 +1,12 @@
 import CourseDetails from "@/components/CourseDetails";
 import BackToLastPageButton from "@/components/BackToLastPageButton";
 import CourseBookingButton from "@/components/CourseBookingButton";
-export default async function Page({ params }: { params: { slug: string } }) {
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
 
   return (
