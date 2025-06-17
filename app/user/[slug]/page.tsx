@@ -14,22 +14,18 @@ import React from "react";
 import { getUserBookingCourses } from "@/app/api/booking";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
-interface paramsProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
+import { useParams } from "next/navigation";
 import { Course } from "@/types";
 import { deleteUserFromCourseReservation } from "@/app/api/booking";
 import { logout } from "@/app/api/auth";
 
-export default function Page({ params }: paramsProps) {
-  const resolvedParams = React.use(params);
-  const userIdSlug = resolvedParams.slug;
+export default function Page() {
+  const params = useParams();
+  const { slug } = params;
 
   const router = useRouter();
+
+  console.log("slug", slug);
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,7 +33,7 @@ export default function Page({ params }: paramsProps) {
   const [cancelTrigger, setCancelTrigger] = useState<number>(1);
 
   const handleCancelBooking = (courseId: string) => {
-    deleteUserFromCourseReservation(userIdSlug, courseId).then(() => {
+    deleteUserFromCourseReservation(slug, courseId).then(() => {
       setCancelTrigger(cancelTrigger + 1);
     });
   };
@@ -59,7 +55,7 @@ export default function Page({ params }: paramsProps) {
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const data = await getUserBookingCourses(userIdSlug);
+        const data = await getUserBookingCourses(slug);
         setBookingRecord(data);
       } catch (error) {
         console.error("Error fetching booking data:", error);
@@ -69,7 +65,7 @@ export default function Page({ params }: paramsProps) {
     };
 
     fetchBookingData();
-  }, [cancelTrigger, userIdSlug]);
+  }, [cancelTrigger, slug]);
 
   if (loading) return <p>Loading...</p>;
 
