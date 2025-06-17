@@ -25,8 +25,6 @@ export default function Page() {
 
   const router = useRouter();
 
-  console.log("slug", slug);
-
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingRecord, setBookingRecord] = useState<Course[]>();
@@ -81,8 +79,8 @@ export default function Page() {
           </CardHeader>
 
           <CardContent>
-            <p>{bookingRecord ? "No Booking Record" : "Booking Record"}</p>
-            <section>
+            <p>{bookingRecord ? "Booking Record" : "No Booking Record"}</p>
+            <section className="space-y-2">
               {bookingRecord &&
                 bookingRecord?.map((record) => (
                   <Card
