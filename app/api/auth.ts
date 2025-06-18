@@ -88,6 +88,7 @@ export async function handleUserLoginToSearchBooking(phone: string) {
 export function logout() {
   signOut(auth)
     .then(() => {
+      localStorage.clear();
       console.log("Sign-out successful.");
     })
     .catch((error) => {
