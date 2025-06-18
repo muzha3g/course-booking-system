@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { CoachSection } from "@/components/CoachSection";
 import { Calendar } from "@/components/Calendar";
 import { logout } from "@/app/api/auth";
+import { deleteCookie } from "cookies-next";
 
 export default function Page() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function Page() {
   const handleLogout = () => {
     try {
       logout();
+      deleteCookie("user_uid");
       router.push("/admin/login");
     } catch (error) {
       console.error("Logout failed:", error);
