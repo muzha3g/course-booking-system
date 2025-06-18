@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { handleUserLogin } from "@/app/api/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
@@ -69,6 +69,11 @@ export default function CourseBookingButton({
       .regex(/^\d{10}$/, { message: "Phone number must be 10 digits." }),
     name: z.string().min(1, { message: "Name is required." }),
   });
+
+  useEffect(() => {
+    setName("");
+    setPhone("");
+  }, [isDialogOpen]);
 
   return (
     <>
