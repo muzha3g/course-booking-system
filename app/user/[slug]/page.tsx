@@ -10,7 +10,6 @@ import {
 
 import { subscribeToAuthChanges } from "@/app/api/user";
 import { useEffect, useState } from "react";
-import React from "react";
 import { getUserBookingCourses } from "@/app/api/booking";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -43,7 +42,7 @@ export default function Page() {
 
   useEffect(() => {
     const unsubscribe = subscribeToAuthChanges((currentUser: any) => {
-      setUser(currentUser.displayName);
+      setUser(currentUser);
       setLoading(false);
     });
 
@@ -65,7 +64,21 @@ export default function Page() {
     fetchBookingData();
   }, [cancelTrigger, slug]);
 
+  useEffect(() => {
+    if (!loading) {
+      if (!user || user.uid != slug) {
+        router.push("/user");
+      }
+    }
+  }, [user, loading, slug, router]);
+
   if (loading) return <p>Loading...</p>;
+
+  if (!user) {
+    return <p>User data not available, redirecting...</p>;
+  }
+
+  console.log(user);
 
   return (
     <>
@@ -75,7 +88,7 @@ export default function Page() {
       <div className="min-h-screen flex flex-col items-center py-10 gap-10">
         <Card className="w-1/2">
           <CardHeader>
-            <CardTitle>Hi {user}</CardTitle>
+            <CardTitle>Hi {user.displayName}</CardTitle>
           </CardHeader>
 
           <CardContent>
