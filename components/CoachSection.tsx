@@ -3,21 +3,20 @@
 import { CoachCard } from "@/components/CoachCard";
 import { AddCoachSheet } from "@/components/AddCoachSheet";
 import { getCoaches } from "@/app/api/coach";
-import { useEffect, useState, useContext } from "react";
-import { Context } from "@/context";
+import { useEffect, useState } from "react";
 import { Coach } from "@/types";
 
 export function CoachSection() {
   const [coachList, setCoachList] = useState<Coach[]>();
   const [loading, setLoading] = useState<boolean>(true);
-  const { countOnCreateNewCoach } = useContext(Context);
 
   useEffect(() => {
-    getCoaches().then((data) => {
-      setCoachList(data);
+    const unsubscribe = getCoaches((coachData: Coach[]) => {
+      setCoachList(coachData);
       setLoading(false);
+      return () => unsubscribe();
     });
-  }, [countOnCreateNewCoach]);
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   return (
