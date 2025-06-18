@@ -2,9 +2,12 @@
 
 import { Calendar } from "@/components/Calendar";
 import CourseBookingSearchAndCancelButton from "@/components/CourseBookingSearchAndCancelButton";
+import { usePathname } from "next/navigation";
 
-export default function page() {
-  const role = "user";
+export default function Page() {
+  const pathname = usePathname();
+  const role = pathname.slice(1);
+
   return (
     <>
       <nav className="flex justify-end p-10">
