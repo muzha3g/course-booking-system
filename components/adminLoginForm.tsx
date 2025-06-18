@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { setCookie } from "cookies-next";
 import { handleAdminLogin } from "@/app/api/auth";
 
-export function LoginForm() {
+export function AdminLoginForm() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
