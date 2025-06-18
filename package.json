@@ -29,6 +29,7 @@
     "date-fns": "^4.1.0",
     "firebase": "^11.8.1",
     "fullcalendar": "^6.1.17",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.511.0",
     "moment-timezone": "^0.5.40",
     "next": "15.3.3",

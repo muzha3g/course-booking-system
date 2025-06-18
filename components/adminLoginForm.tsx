@@ -17,25 +17,35 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useState, SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (event: SyntheticEvent) => {
+  const handleLogin = async (event: SyntheticEvent) => {
     event.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        localStorage.setItem("user_uid", user.uid);
-        router.push("/admin/dashboard");
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        alert(errorMessage);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      Cookies.set("user_uid", user.uid, {
+        expires: 3,
+        path: "/",
+        sameSite: "Lax",
       });
+
+      console.log("User UID set in cookie:", Cookies.get("user_uid"));
+      router.push("/admin/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   return (
