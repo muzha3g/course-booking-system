@@ -7,9 +7,13 @@ import { CoachSection } from "@/components/CoachSection";
 import { Calendar } from "@/components/Calendar";
 import { logout } from "@/app/api/auth";
 import { deleteCookie } from "cookies-next";
+import { usePathname } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const role = pathname.split("/")[1];
 
   const handleLogout = () => {
     try {
@@ -20,8 +24,6 @@ export default function Page() {
       console.error("Logout failed:", error);
     }
   };
-
-  const role = "admin";
 
   return (
     <>
