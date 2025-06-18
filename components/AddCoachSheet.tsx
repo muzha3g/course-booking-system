@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { Textarea } from "@/components/ui/textarea";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { addCoach } from "@/app/api/coach";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch, Controller } from "react-hook-form";
@@ -81,7 +80,8 @@ export function AddCoachSheet() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      await addDoc(collection(db, "coach"), data);
+      // await addDoc(collection(db, "coach"), data);
+      await addCoach(data);
       form.reset();
       setIsSheetOpen(false);
     } catch (error) {

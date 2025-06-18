@@ -1,4 +1,4 @@
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export const getCoaches = (callback) => {
@@ -9,4 +9,8 @@ export const getCoaches = (callback) => {
 
     callback(coaches);
   });
+};
+
+export const addCoach = async (data) => {
+  await addDoc(collection(db, "coach"), data);
 };

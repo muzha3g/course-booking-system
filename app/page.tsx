@@ -13,7 +13,7 @@ export default function Home() {
         href="./admin/login"
         className="bg-gray-300 rounded-4xl text-2xl w-72 text-center py-3"
       >
-        Admin DashBoard
+        Admin Login
       </Link>
     </div>
   );
