@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { subscribeToAuthChanges } from "@/app/api/user";
+import { subscribeToAuthChanges } from "@/app/api/auth";
 import { useEffect, useState } from "react";
 import { getUserBookingCourses } from "@/app/api/booking";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ export default function Page() {
   const router = useRouter();
 
   const [user, setUser] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [bookingRecord, setBookingRecord] = useState<Course[]>();
   const [cancelTrigger, setCancelTrigger] = useState<number>(1);

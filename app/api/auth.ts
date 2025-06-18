@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 import { addUserToCourseReservation } from "./booking";
@@ -103,4 +104,11 @@ export function logout() {
     .catch((error) => {
       console.error(error);
     });
+}
+
+export function subscribeToAuthChanges(callback: any) {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    callback(user);
+  });
+  return unsubscribe;
 }
