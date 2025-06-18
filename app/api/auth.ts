@@ -85,6 +85,15 @@ export async function handleUserLoginToSearchBooking(phone: string) {
   }
 }
 
+export async function handleAdminLogin(email: string, password: string) {
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+  return userCredential;
+}
+
 export function logout() {
   signOut(auth)
     .then(() => {

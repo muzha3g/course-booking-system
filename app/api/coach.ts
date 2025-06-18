@@ -1,5 +1,6 @@
 import { collection, onSnapshot, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { Coach } from "@/types";
 
 export const getCoaches = (callback) => {
   return onSnapshot(collection(db, "coach"), (snapshot) => {
@@ -11,6 +12,6 @@ export const getCoaches = (callback) => {
   });
 };
 
-export const addCoach = async (data) => {
+export const addCoach = async (data: Coach[]) => {
   await addDoc(collection(db, "coach"), data);
 };

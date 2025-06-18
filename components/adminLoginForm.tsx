@@ -12,12 +12,10 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import { useState, SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
 import { setCookie } from "cookies-next";
+import { handleAdminLogin } from "@/app/api/auth";
 
 export function LoginForm() {
   const router = useRouter();
@@ -29,11 +27,7 @@ export function LoginForm() {
     event.preventDefault();
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await handleAdminLogin(email, password);
       const user = userCredential.user;
 
       setCookie("user_uid", user.uid);
