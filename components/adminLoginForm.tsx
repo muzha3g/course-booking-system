@@ -29,7 +29,7 @@ export function LoginForm() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        localStorage.setItem("user uid", user.uid);
+        localStorage.setItem("user_uid", user.uid);
         router.push("/admin/dashboard");
       })
       .catch((error) => {
