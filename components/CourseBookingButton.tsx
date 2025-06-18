@@ -31,6 +31,14 @@ export default function CourseBookingButton({
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleSubmit = async () => {
+    const InputSchema = z.object({
+      phone: z
+        .string()
+        .min(1, { message: "Phone number is required." })
+        .regex(/^\d{10}$/, { message: "Phone number must be 10 digits." }),
+      name: z.string().min(1, { message: "Name is required." }),
+    });
+
     const validationResult = InputSchema.safeParse({ phone, name });
 
     if (!validationResult.success) {
@@ -61,14 +69,6 @@ export default function CourseBookingButton({
       alert("Booking failed. Please try again.");
     }
   };
-
-  const InputSchema = z.object({
-    phone: z
-      .string()
-      .min(1, { message: "Phone number is required." })
-      .regex(/^\d{10}$/, { message: "Phone number must be 10 digits." }),
-    name: z.string().min(1, { message: "Name is required." }),
-  });
 
   useEffect(() => {
     setName("");
