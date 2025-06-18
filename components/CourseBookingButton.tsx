@@ -28,6 +28,7 @@ export default function CourseBookingButton({
   const [phone, setPhone] = useState<string>("");
   const [nameErrorMessage, setNameErrorMessage] = useState<string>("");
   const [phoneErrorMessage, setPhoneErrorMessage] = useState<string>("");
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     const validationResult = InputSchema.safeParse({ phone, name });
@@ -54,6 +55,7 @@ export default function CourseBookingButton({
 
       setName("");
       setPhone("");
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Booking failed:", error);
       alert("Booking failed. Please try again.");
@@ -71,7 +73,7 @@ export default function CourseBookingButton({
   return (
     <>
       <Toaster />
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <form>
           <DialogTrigger asChild>
             <Button className="w-24">Book</Button>

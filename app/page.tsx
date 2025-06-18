@@ -7,7 +7,7 @@ export default function Home() {
         href="./user"
         className="bg-slate-300 rounded-4xl text-2xl w-72 text-center py-3"
       >
-        Booking Course
+        Book Course
       </Link>
       <Link
         href="./admin/login"
