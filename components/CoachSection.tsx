@@ -1,7 +1,7 @@
 "use client";
 
 import { CoachCard } from "@/components/CoachCard";
-import { AddCoachSheet } from "@/components/AddCoachSheet";
+import { AddCoachSheet } from "./Coach/AddCoachSheet";
 import { getCoachesInRealTime } from "@/app/api/coach";
 import { useEffect, useState } from "react";
 import { Coach } from "@/types";
