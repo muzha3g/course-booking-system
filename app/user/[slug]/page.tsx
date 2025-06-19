@@ -79,8 +79,6 @@ export default function Page() {
     return <p>User data not available, redirecting...</p>;
   }
 
-  console.log(user);
-
   return (
     <>
       <nav className="flex justify-end p-8 ">
@@ -93,9 +91,11 @@ export default function Page() {
           </CardHeader>
 
           <CardContent>
-            <p>{bookingRecord ? "Booking Record" : "No Booking Record"}</p>
+            <p>
+              {bookingRecord?.length ? "Booking Record" : "No Booking Record"}
+            </p>
             <section className="space-y-2">
-              {bookingRecord &&
+              {bookingRecord?.length &&
                 bookingRecord?.map((record) => (
                   <Card
                     key={record.id}
