@@ -2,7 +2,7 @@
 
 import { CoachCard } from "@/components/CoachCard";
 import { AddCoachSheet } from "@/components/AddCoachSheet";
-import { getCoaches } from "@/app/api/coach";
+import { getCoachesInRealTime } from "@/app/api/coach";
 import { useEffect, useState } from "react";
 import { Coach } from "@/types";
 
@@ -11,7 +11,7 @@ export function CoachSection() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = getCoaches((coachData: Coach[]) => {
+    const unsubscribe = getCoachesInRealTime((coachData: Coach[]) => {
       setCoachList(coachData);
       setLoading(false);
       return () => unsubscribe();

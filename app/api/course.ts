@@ -1,4 +1,3 @@
-import { QuerySnapshot } from "./../../node_modules/@firebase/firestore-types/index.d";
 import {
   collection,
   getDocs,
