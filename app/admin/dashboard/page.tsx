@@ -20,7 +20,7 @@ export default function Page() {
     try {
       logout();
       deleteCookie("user_uid");
-      router.push("/admin/login");
+      router.replace("/admin/login");
     } catch (error) {
       console.error("Logout failed:", error);
     }

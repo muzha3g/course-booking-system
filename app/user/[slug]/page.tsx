@@ -38,7 +38,7 @@ export default function Page() {
 
   const handleLogout = () => {
     logout();
-    router.push("/user");
+    router.replace("/user");
   };
 
   useEffect(() => {
