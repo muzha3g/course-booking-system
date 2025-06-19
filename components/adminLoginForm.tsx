@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, SyntheticEvent } from "react";
@@ -46,7 +45,6 @@ export function AdminLoginForm() {
       const user = userCredential.user;
       const token = await user.getIdToken();
       setCookie("firebase_token", token);
-
       router.push("/admin/dashboard");
     } catch {
       setPasswordErrorMessage("Invalid credentials. Please try again.");

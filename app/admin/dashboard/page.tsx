@@ -12,9 +12,7 @@ import { usePathname } from "next/navigation";
 export default function Page() {
   const router = useRouter();
   const pathname = usePathname();
-
   const role = pathname.split("/")[1];
-  console.log(role);
 
   const handleLogout = () => {
     try {

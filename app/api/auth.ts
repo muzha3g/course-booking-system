@@ -30,9 +30,7 @@ export async function handleUserLogin(
       password!
     );
     const user = userCredential.user;
-
     await updateProfile(user, { displayName: name });
-    console.log("User created successfully:", user);
 
     const bookingResult = await addUserToCourseReservation(
       courseId,
@@ -93,7 +91,6 @@ export async function handleAdminLogin(email: string, password: string) {
     email,
     password
   );
-  console.log("userCredential: ", userCredential.user);
 
   return userCredential;
 }

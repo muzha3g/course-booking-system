@@ -25,7 +25,6 @@ export default function Page() {
   const router = useRouter();
 
   const [user, setUser] = useState(null);
-
   const [loading, setLoading] = useState(true);
   const [bookingRecord, setBookingRecord] = useState<Course[]>();
   const [cancelTrigger, setCancelTrigger] = useState<number>(1);

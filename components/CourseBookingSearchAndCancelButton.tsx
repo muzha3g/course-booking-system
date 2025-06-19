@@ -44,14 +44,8 @@ export default function CourseBookingSearchAndCancelButton() {
       return;
     }
 
-    // console.log("Validation Success:", validationResult.data);
-    // console.log("Form submitted successfully!");
-
     try {
       const uid = await handleUserLoginToSearchBooking(phone);
-
-      // [!]handle error message
-      console.log("result: ", uid);
       setPhone("");
       setErrorMessage("");
       router.push(`/user/${uid}`);

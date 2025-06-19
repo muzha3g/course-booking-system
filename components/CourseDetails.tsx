@@ -12,20 +12,19 @@ import { CiCalendar } from "react-icons/ci";
 import { IoTimeOutline } from "react-icons/io5";
 import Image from "next/image";
 import testImage from "@/public/test.png";
-
 import { getCourse } from "@/app/api/course";
 import { useEffect, useState } from "react";
 import { Course } from "@/types";
 
 export default function CourseDetails({ courseId }: { courseId: string }) {
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [course, setCourse] = useState<Course>();
   const [role, setRole] = useState<string | null>("");
 
   useEffect(() => {
     const getRole = localStorage.getItem("role");
     setRole(getRole);
-  });
+  }, []);
 
   useEffect(() => {
     try {
@@ -50,7 +49,6 @@ export default function CourseDetails({ courseId }: { courseId: string }) {
         <CardHeader>
           <CardTitle className="text-xl">{course.title}</CardTitle>
           <CardDescription>
-            {" "}
             <div className="text-gray-700 flex items-center gap-2">
               <CiCalendar />
               {course.date.slice(0, 10)}
