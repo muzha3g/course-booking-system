@@ -1,4 +1,4 @@
-import { doc, setDoc, arrayUnion, updateDoc, getDoc } from "firebase/firestore";
+import { doc, arrayUnion, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getCourse } from "./course";
 import { getCourses } from "./course";

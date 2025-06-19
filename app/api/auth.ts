@@ -22,7 +22,7 @@ export async function handleUserLogin(
   const password = process.env.NEXT_PUBLIC_PASSWORD;
 
   try {
-    //  // Case 1 : new user
+    // Case 1 : new user
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
