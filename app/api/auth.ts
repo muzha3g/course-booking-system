@@ -92,6 +92,7 @@ export async function handleAdminLogin(email: string, password: string) {
     email,
     password
   );
+  console.log("userCredential: ", userCredential.user);
   return userCredential;
 }
 

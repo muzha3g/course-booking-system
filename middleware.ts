@@ -14,6 +14,12 @@ export function middleware(request: NextRequest) {
       console.log("userUid !== adminUid)");
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
+
+    const decodedToken = await getAuth().verifyIdToken(token);
+
+    if (!decodedToken.isAdmin) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
   }
 
   return NextResponse.next();
