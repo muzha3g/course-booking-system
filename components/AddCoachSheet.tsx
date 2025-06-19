@@ -31,6 +31,7 @@ import {
 import { useFieldArray } from "react-hook-form";
 
 import { useState, useEffect } from "react";
+import { Coach } from "@/types";
 
 const times = Array.from({ length: 13 }, (_, i) => ({
   label: `${String(i + 9).padStart(2, "0")}:00 - ${String(i + 10).padStart(
@@ -68,7 +69,19 @@ const FormSchema = z.object({
     .nonempty("At least one available time is required"),
 });
 
-export function AddCoachSheet() {
+export function AddCoachSheet({
+  coach,
+  onClick,
+}: {
+  coach?: Coach | null;
+  onClick?: () => void;
+}) {
+  const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
+
+  const isEditing = coach !== null;
+  console.log("isEditing: ", isEditing);
+  console.log("coach: ", coach);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -80,7 +93,13 @@ export function AddCoachSheet() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      await addCoach(data);
+      if (isEditing && coach?.id) {
+        alert("update");
+        // await updateCoach(coach.id, data);
+      } else {
+        await addCoach(data);
+      }
+
       form.reset();
       setIsSheetOpen(false);
     } catch (error) {
@@ -90,18 +109,15 @@ export function AddCoachSheet() {
     }
   }
 
+  async function handleDelete() {
+    alert("delete");
+    setIsSheetOpen(false);
+  }
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "availableTimes",
   });
-
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isSheetOpen) {
-      form.reset();
-    }
-  }, [isSheetOpen, form]);
 
   function resetValueOnAvailableTime(index: number) {
     form.setValue(`availableTimes.${index}.courseType`, "");
@@ -137,10 +153,37 @@ export function AddCoachSheet() {
     return occupied;
   };
 
+  const handleAddClick = () => {
+    form.reset({
+      name: "",
+      description: "",
+      availableTimes: [defaultAvailableTime],
+    });
+    setIsSheetOpen(true);
+    if (onClick) onClick();
+  };
+
+  useEffect(() => {
+    if (coach) {
+      form.reset({
+        name: coach.name,
+        description: coach.description,
+        availableTimes: coach.availableTimes,
+      });
+      setIsSheetOpen(true);
+    }
+  }, [coach, form]);
+
+  useEffect(() => {
+    if (!isSheetOpen) {
+      form.reset();
+    }
+  }, [isSheetOpen, form, onClick]);
+
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
-        <Button variant="secondary" onClick={() => setIsSheetOpen(true)}>
+        <Button variant="secondary" onClick={handleAddClick}>
           <MdOutlineAddCircle />
           Add Coach
         </Button>
@@ -148,7 +191,9 @@ export function AddCoachSheet() {
 
       <SheetContent className="w-[500px] !max-w-none">
         <SheetHeader>
-          <SheetTitle className="text-2xl">New Coach</SheetTitle>
+          <SheetTitle className="text-2xl">
+            {isEditing ? "Edit Coach" : "New Coach"}
+          </SheetTitle>
         </SheetHeader>
         <section className="flex-1 px-4">
           <form
@@ -227,7 +272,6 @@ export function AddCoachSheet() {
                         name={`availableTimes.${index}.weekday`}
                         render={({ field: selectField }) => (
                           <Select
-                            // onValueChange={selectField.onChange}
                             value={selectField.value}
                             onValueChange={(val) => {
                               selectField.onChange(val);
@@ -348,8 +392,13 @@ export function AddCoachSheet() {
             form="coach-info-form"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            Create
+            {isEditing ? "Update" : "Create"}
           </Button>
+          {isEditing && (
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete
+            </Button>
+          )}
 
           <SheetClose asChild>
             <Button variant="outline">Close</Button>
