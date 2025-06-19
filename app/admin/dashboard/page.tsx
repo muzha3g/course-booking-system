@@ -14,6 +14,7 @@ export default function Page() {
   const pathname = usePathname();
 
   const role = pathname.split("/")[1];
+  console.log(role);
 
   const handleLogout = () => {
     try {

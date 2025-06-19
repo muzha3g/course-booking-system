@@ -6,7 +6,7 @@ import momentTimezonePlugin from "@fullcalendar/moment-timezone";
 import { Course } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getCourses } from "@/app/api/course";
+import { getCourses, generateCourseFromCoach } from "@/app/api/course";
 
 export const Calendar = ({ role }: { role: string }) => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -18,13 +18,7 @@ export const Calendar = ({ role }: { role: string }) => {
   );
 
   useEffect(() => {
-    if (role === "user") {
-      window.localStorage.setItem("role", role);
-    } else if (role === "admin") {
-      window.localStorage.setItem("role", role);
-    } else {
-      throw new Error("Invalid role");
-    }
+    window.localStorage.setItem("role", role);
   }, [role]);
 
   useEffect(() => {
@@ -39,6 +33,21 @@ export const Calendar = ({ role }: { role: string }) => {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const syncCourses = async () => {
+      setLoading(true);
+      try {
+        await generateCourseFromCoach();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    syncCourses();
   }, []);
 
   if (loading) return <>Loading</>;
