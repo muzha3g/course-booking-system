@@ -80,7 +80,6 @@ export function AddCoachSheet() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      // await addDoc(collection(db, "coach"), data);
       await addCoach(data);
       form.reset();
       setIsSheetOpen(false);
