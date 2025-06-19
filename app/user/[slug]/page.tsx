@@ -95,7 +95,7 @@ export default function Page() {
               {bookingRecord?.length ? "Booking Record" : "No Booking Record"}
             </p>
             <section className="space-y-2">
-              {bookingRecord?.length &&
+              {bookingRecord &&
                 bookingRecord?.map((record) => (
                   <Card
                     key={record.id}
