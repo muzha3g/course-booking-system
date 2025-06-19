@@ -321,7 +321,7 @@ export function AddCoachSheet({
                                     !!(
                                       currentWeekday &&
                                       occupiedSlots.has(
-                                        `${currentWeekday}-${t}`
+                                        `${currentWeekday}-${t.value}`
                                       )
                                     )
                                   }
