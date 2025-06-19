@@ -44,11 +44,8 @@ export function AdminLoginForm() {
     try {
       const userCredential = await handleAdminLogin(email, password);
       const user = userCredential.user;
-
-      setCookie("user_uid", user.uid);
       const token = await user.getIdToken();
       setCookie("firebase_token", token);
-      console.log("token: ", token);
 
       router.push("/admin/dashboard");
     } catch {
