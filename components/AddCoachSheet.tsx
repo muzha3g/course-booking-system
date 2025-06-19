@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { Textarea } from "@/components/ui/textarea";
-import { addCoach, updateCoach } from "@/app/api/coach";
+import { addCoach, updateCoach, deleteCoach } from "@/app/api/coach";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch, Controller } from "react-hook-form";
@@ -107,8 +107,8 @@ export function AddCoachSheet({
     }
   }
 
-  async function handleDelete() {
-    alert("delete");
+  async function handleDelete(coachId: string) {
+    await deleteCoach(coachId);
     setIsSheetOpen(false);
   }
 
@@ -393,7 +393,10 @@ export function AddCoachSheet({
             {isEditing ? "Update" : "Create"}
           </Button>
           {isEditing && (
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button
+              variant="destructive"
+              onClick={() => handleDelete(coach!.id)}
+            >
               Delete
             </Button>
           )}
