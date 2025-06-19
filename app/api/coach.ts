@@ -1,4 +1,11 @@
-import { collection, onSnapshot, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Coach } from "@/types";
 
@@ -21,4 +28,9 @@ export const getCoaches = async () => {
 
 export const addCoach = async (data: Coach[]) => {
   await addDoc(collection(db, "coach"), data);
+};
+
+export const updateCoach = async (coach: Coach) => {
+  const coachRef = doc(db, "coach", coach.id);
+  await updateDoc(coachRef, coach);
 };

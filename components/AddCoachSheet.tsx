@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { Textarea } from "@/components/ui/textarea";
-import { addCoach } from "@/app/api/coach";
+import { addCoach, updateCoach } from "@/app/api/coach";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch, Controller } from "react-hook-form";
@@ -32,6 +32,7 @@ import { useFieldArray } from "react-hook-form";
 
 import { useState, useEffect } from "react";
 import { Coach } from "@/types";
+import { IoTrashOutline } from "react-icons/io5";
 
 const times = Array.from({ length: 13 }, (_, i) => ({
   label: `${String(i + 9).padStart(2, "0")}:00 - ${String(i + 10).padStart(
@@ -79,8 +80,6 @@ export function AddCoachSheet({
   const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
 
   const isEditing = coach !== null;
-  console.log("isEditing: ", isEditing);
-  console.log("coach: ", coach);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -94,8 +93,7 @@ export function AddCoachSheet({
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       if (isEditing && coach?.id) {
-        alert("update");
-        // await updateCoach(coach.id, data);
+        await updateCoach({ id: coach.id, ...data });
       } else {
         await addCoach(data);
       }
@@ -351,7 +349,7 @@ export function AddCoachSheet({
                         variant="secondary"
                         onClick={() => remove(index)}
                       >
-                        d
+                        <IoTrashOutline />
                       </Button>
                     ) : (
                       <Button
