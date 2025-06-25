@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
-import admin from "./lib/firebaseAdmin";
+// import admin from "./lib/firebaseAdmin";
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith("/admin") &&
     request.nextUrl.pathname !== "/admin/login"
@@ -12,16 +12,16 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
 
-    try {
-      const isAdmin = (await admin.auth().verifyIdToken(token)).isAdmin;
-      if (isAdmin) {
-        return NextResponse.next();
-      } else {
-        return NextResponse.redirect(new URL("/admin/login", request.url));
-      }
-    } catch (error) {
-      console.error("Token verification failed", error);
-    }
+    // try {
+    //   const isAdmin = (await admin.auth().verifyIdToken(token)).isAdmin;
+    //   if (isAdmin) {
+    //     return NextResponse.next();
+    //   } else {
+    //     return NextResponse.redirect(new URL("/admin/login", request.url));
+    //   }
+    // } catch (error) {
+    //   console.error("Token verification failed", error);
+    // }
   }
 
   return NextResponse.next();
