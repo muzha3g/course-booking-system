@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 
 import { addUserToCourseReservation } from "./booking";
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, setCookie } from "cookies-next";
 
 function phoneToEmail(phone: string) {
   return `${phone}@g.com`;
@@ -91,6 +91,10 @@ export async function handleAdminLogin(email: string, password: string) {
     email,
     password
   );
+
+  const token = (await userCredential.user.getIdTokenResult()).token;
+
+  setCookie("auth_token", token);
 
   return userCredential;
 }
