@@ -1,8 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
+import admin from "./lib/firebaseAdmin";
 
-export function middleware(request: NextRequest) {
-  console.log("--- Middleware Started ---");
-
+export async function middleware(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith("/admin") &&
     request.nextUrl.pathname !== "/admin/login"
@@ -11,6 +10,17 @@ export function middleware(request: NextRequest) {
 
     if (!token) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+
+    try {
+      const isAdmin = (await admin.auth().verifyIdToken(token)).isAdmin;
+      if (isAdmin) {
+        return NextResponse.next();
+      } else {
+        return NextResponse.redirect(new URL("/admin/login", request.url));
+      }
+    } catch (error) {
+      console.error("Token verification failed", error);
     }
   }
 
