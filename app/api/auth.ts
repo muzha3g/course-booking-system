@@ -93,8 +93,7 @@ export async function handleAdminLogin(email: string, password: string) {
   );
 
   const token = (await userCredential.user.getIdTokenResult()).token;
-
-  setCookie("auth_token", token);
+  setCookie("firebase_token", token);
 
   return userCredential;
 }

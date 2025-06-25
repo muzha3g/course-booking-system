@@ -41,10 +41,7 @@ export function AdminLoginForm() {
     }
 
     try {
-      const userCredential = await handleAdminLogin(email, password);
-      const user = userCredential.user;
-      const token = await user.getIdToken();
-      setCookie("firebase_token", token);
+      await handleAdminLogin(email, password);
       router.push("/admin/dashboard");
     } catch {
       setPasswordErrorMessage("Invalid credentials. Please try again.");
