@@ -20,7 +20,7 @@ export default function Page() {
   const handleLogout = () => {
     try {
       logout();
-      deleteCookie("user_uid");
+      deleteCookie("firebase_token");
       router.replace("/admin/login");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -30,7 +30,7 @@ export default function Page() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        router.push("/login");
+        router.push("admin/login");
         return;
       }
 
@@ -41,7 +41,7 @@ export default function Page() {
     });
 
     return () => unsubscribe();
-  }, [router]);
+  }, []);
 
   return (
     <>
