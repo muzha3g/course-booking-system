@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
-import { setCookie } from "cookies-next";
 import { handleAdminLogin } from "@/app/api/auth";
 import { z } from "zod";
 
