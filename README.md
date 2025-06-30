@@ -53,9 +53,8 @@ Follow these steps to get your project up and running:
 
 To connect your application to Firebase, you'll need to set up your environment variables:
 
-1. Locate the `.env.sample` file in the root of your project.
-2. Rename `.env.sample` to `.env`.
-3. Paste your Firebase SDK configuration variables into the `.env` file. You can find these credentials in your Firebase project settings.
+1. Rename `.env.sample` to `.env`.
+2. Paste your Firebase SDK configuration variables into the `.env` file. You can find these credentials in your Firebase project settings.
 
    Your `.env` file should look something like this:
 
@@ -67,6 +66,14 @@ To connect your application to Firebase, you'll need to set up your environment 
    NEXT_PUBLIC_MESSAGING_SENDER_ID=
    NEXT_PUBLIC_APP_ID=
    NEXT_PUBLIC_PASSWORD="default" # You can change this value to whatever you want
+   NEXT_PUBLIC_ADMIN_UID=
+   NEXT_PUBLIC_FIREBASE_SERVICE_ACCOUNT_KEY= #Follow firebase guide, create a service account and paste the json key here
+   ```
+
+3. Ensure to fill the value to every environment variable, and run the script `set-admin-claim.js` to set the certain account to be admin.
+
+   ```
+   node set-admin-claim.js
    ```
 
 ---
@@ -75,5 +82,4 @@ To connect your application to Firebase, you'll need to set up your environment 
 
 I'm currently busy with lab work, but I will implement the following feature soon:
 
-- Admin Route Protection
 - Deploy the repo
