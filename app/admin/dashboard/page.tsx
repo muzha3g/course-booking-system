@@ -8,6 +8,9 @@ import { Calendar } from "@/components/Calendar";
 import { logout } from "@/app/api/auth";
 import { deleteCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { getIdTokenResult, onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function Page() {
   const router = useRouter();
@@ -23,6 +26,22 @@ export default function Page() {
       console.error("Logout failed:", error);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+
+      const tokenResult = await getIdTokenResult(user);
+      if (!tokenResult.claims.admin) {
+        router.push("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>
